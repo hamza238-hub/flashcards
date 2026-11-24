@@ -1,4 +1,4 @@
-const APP_PASSWORD = "1234";
+const APP_PASSWORD = "hamza||1234";
 const MAX_ATTEMPTS = 5;
 const LOCKOUT_TIME = 30000;
 const SESSION_TIMEOUT = 30 * 60 * 1000;
