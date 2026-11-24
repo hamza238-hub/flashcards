@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards Pro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="loginScreen" class="login-screen">
+    <div class="login-box">
+        <h1>Flashcards Pro</h1>
+        <p class="subtitle">أداة إدارة البطاقات التعليمية</p>
+        
+        <div class="form-group">
+            <label>كلمة المرور</label>
+            <div class="password-wrapper">
+                <input type="password" id="passwordInput" placeholder="أدخل كلمة المرور">
+                <button type="button" id="togglePasswordBtn" class="toggle-password">إظهار</button>
+            </div>
+        </div>
+        
+        <button type="button" class="btn btn-primary btn-block" onclick="login()">دخول</button>
+        
+        <p id="loginError" class="error-msg"></p>
+    </div>
+</div>
+
+<div id="mainApp" class="container" style="display: none;">
+    <header>
+        <div class="header-content">
+            <div>
+                <h1>Flashcards Pro</h1>
+                <p>إدارة البطاقات التعليمية</p>
+            </div>
+            <div class="header-actions">
+                <button class="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع">🌙</button>
+                <button class="logout-btn" onclick="logout()">خروج</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('add', event)">إضافة</button>
+        <button class="tab-btn" onclick="switchTab('review', event)">مراجعة</button>
+        <button class="tab-btn" onclick="switchTab('quiz', event)">اختبار</button>
+        <button class="tab-btn" onclick="switchTab('manage', event)">إدارة</button>
+        <button class="tab-btn" onclick="switchTab('stats', event)">إحصائيات</button>
+        <button class="tab-btn" onclick="switchTab('backup', event)">نسخ احتياطي</button>
+    </div>
+
+    <div id="add" class="section active">
+        <h2>إضافة بطاقة جديدة</h2>
+        <div class="form-group">
+            <label>الكلمة بالإنجليزية</label>
+            <input type="text" id="enWord" placeholder="مثال: Marketing">
+        </div>
+        <div class="form-group">
+            <label>المعنى</label>
+            <input type="text" id="arWord" placeholder="مثال: تسويق">
+        </div>
+        <div class="form-group">
+            <label>مثال على الاستخدام</label>
+            <textarea id="example" placeholder="مثال: Digital marketing is important." rows="2"></textarea>
+        </div>
+        <div class="form-group">
+            <label>التصنيف</label>
+            <input type="text" id="category" placeholder="مثال: Business, Marketing" list="categoriesList">
+            <datalist id="categoriesList"></datalist>
+        </div>
+        <div class="form-group">
+            <label>مستوى الصعوبة</label>
+            <select id="difficulty">
+                <option value="easy">سهل</option>
+                <option value="medium" selected>متوسط</option>
+                <option value="hard">صعب</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" onclick="addCard()">إضافة</button>
+    </div>
+
+    <div id="review" class="section">
+        <h2>وضع المراجعة</h2>
+        <div class="review-filters">
+            <div class="form-group">
+                <label>التصنيف</label>
+                <select id="reviewFilter" onchange="startReview()">
+                    <option value="all">الكل</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>المستوى</label>
+                <select id="difficultyFilter" onchange="startReview()">
+                    <option value="all">الكل</option>
+                    <option value="easy">سهل</option>
+                    <option value="medium">متوسط</option>
+                    <option value="hard">صعب</option>
+                </select>
+            </div>
+        </div>
+        
+        <div id="reviewArea" style="display: none;">
+            <div class="flashcard-container" onclick="flipCard()">
+                <div class="flashcard" id="flashcard">
+                    <div class="card-face card-front">
+                        <span class="card-category" id="cardCat"></span>
+                        <span class="card-difficulty" id="cardDiff"></span>
+                        <h2 id="cardFront"></h2>
+                        <p class="card-hint">اضغط للقلب</p>
+                    </div>
+                    <div class="card-face card-back">
+                        <h2 id="cardBack"></h2>
+                        <p id="cardExample" class="card-example"></p>
+                        <button class="btn-speak" onclick="event.stopPropagation(); speakWord()">نطق</button>
+                    </div>
+                </div>
+            </div>
+            <div class="review-controls">
+                <button class="btn btn-danger" onclick="markDifficulty('hard')">صعب</button>
+                <button class="btn btn-warning" onclick="markDifficulty('medium')">متوسط</button>
+                <button class="btn btn-success" onclick="markDifficulty('easy')">سهل</button>
+            </div>
+            <p class="review-progress" id="reviewProgress"></p>
+        </div>
+        <div id="emptyReview" class="empty-state" style="display: none;">
+            <h3>لا توجد كلمات للمراجعة</h3>
+            <p>أضف كلمات جديدة أو غيّر الفلتر</p>
+        </div>
+    </div>
+
+    <div id="quiz" class="section">
+        <h2>الاختبار السريع</h2>
+        <div class="quiz-setup" id="quizSetup">
+            <p>اختبر نفسك في الكلمات التي تعلمتها</p>
+            <button class="btn btn-primary" onclick="startQuiz()">ابدأ الاختبار</button>
+        </div>
+        <div id="quizArea" style="display: none;">
+            <div class="quiz-question">
+                <h3 id="quizQuestion"></h3>
+                <div class="quiz-options" id="quizOptions"></div>
+            </div>
+            <p class="quiz-progress" id="quizProgress"></p>
+        </div>
+        <div id="quizResult" style="display: none;">
+            <h3>النتيجة</h3>
+            <div class="quiz-score" id="quizScore"></div>
+            <button class="btn btn-primary" onclick="resetQuiz()">اختبار جديد</button>
+        </div>
+    </div>
+
+    <div id="manage" class="section">
+        <h2>إدارة البطاقات</h2>
+        <div class="form-group">
+            <input type="text" id="searchInput" placeholder="بحث..." oninput="renderList()">
+        </div>
+        <div class="cards-list" id="cardsList"></div>
+    </div>
+
+    <div id="stats" class="section">
+        <h2>الإحصائيات</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalCount">0</div>
+                <div class="stat-label">إجمالي الكلمات</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="learningCount">0</div>
+                <div class="stat-label">قيد التعلم</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="masteredCount">0</div>
+                <div class="stat-label">تم إتقانها</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="accuracyRate">0%</div>
+                <div class="stat-label">نسبة الإتقان</div>
+            </div>
+        </div>
+        <div class="stats-details">
+            <h3>توزيع حسب التصنيف</h3>
+            <div id="categoryStats"></div>
+            <h3>توزيع حسب الصعوبة</h3>
+            <div id="difficultyStats"></div>
+        </div>
+    </div>
+
+    <div id="backup" class="section">
+        <h2>النسخ الاحتياطي</h2>
+        <p class="info-text">
+            يتم حفظ بياناتك في متصفحك. يُنصح بتصدير بياناتك بشكل دوري.
+        </p>
+        <div class="backup-actions">
+            <button class="btn btn-primary" onclick="exportData()">تصدير البيانات</button>
+            <button class="btn btn-success" onclick="document.getElementById('importFile').click()">استيراد البيانات</button>
+            <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importData(event)">
+            <button class="btn btn-danger" onclick="clearAllData()">مسح جميع البيانات</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
