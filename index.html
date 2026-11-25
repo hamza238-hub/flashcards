@@ -4,7 +4,455 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcards Pro</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f9fafb;
+            --card-bg: #ffffff;
+            --text: #111827;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        [data-theme="dark"] {
+            --bg: #111827;
+            --card-bg: #1f2937;
+            --text: #f9fafb;
+            --text-light: #9ca3af;
+            --border: #374151;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+        }
+
+        .login-box {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-box h1 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1.8rem;
+        }
+
+        .login-box .subtitle {
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-left: 70px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .btn-block {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+        }
+
+        .error-msg {
+            color: var(--danger);
+            margin-top: 10px;
+            font-size: 0.875rem;
+            min-height: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 30px;
+            padding: 20px 25px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+
+        header p {
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-toggle, .logout-btn {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .section {
+            display: none;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+            font-size: 1.25rem;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            background: var(--card-bg);
+            color: var(--text);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+
+        .flashcard-container {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 400px;
+            height: 250px;
+            margin: 25px auto;
+            cursor: pointer;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .card-face h2 {
+            font-size: 1.75rem;
+            margin-bottom: 10px;
+        }
+
+        .card-category, .card-difficulty {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+
+        .card-category { top: 12px; right: 12px; }
+        .card-difficulty { top: 12px; left: 12px; }
+
+        .review-filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .review-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .review-progress {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--text-light);
+        }
+
+        .cards-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .list-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .list-card h4 {
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+
+        .list-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .list-card .badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-left: 4px;
+        }
+
+        .list-card .delete-btn, .list-card .edit-btn {
+            position: absolute;
+            top: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .list-card .delete-btn { left: 10px; }
+        .list-card .edit-btn { left: 50px; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .quiz-setup, #quizArea, #quizResult {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .quiz-question h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .quiz-option {
+            padding: 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .quiz-option.correct {
+            background: var(--success);
+            color: white;
+        }
+
+        .quiz-option.wrong {
+            background: var(--danger);
+            color: white;
+        }
+
+        .quiz-score {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+
+        .backup-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .flashcard-container { height: 220px; }
+            .review-filters { grid-template-columns: 1fr; }
+            .quiz-options { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
@@ -21,7 +469,7 @@
             </div>
         </div>
         
-        <button type="button" class="btn btn-primary btn-block" onclick="login()">دخول</button>
+        <button type="button" id="loginBtn" class="btn btn-primary btn-block">دخول</button>
         
         <p id="loginError" class="error-msg"></p>
     </div>
@@ -35,19 +483,19 @@
                 <p>إدارة البطاقات التعليمية</p>
             </div>
             <div class="header-actions">
-                <button class="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع">🌙</button>
-                <button class="logout-btn" onclick="logout()">خروج</button>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="logout-btn" id="logoutBtn">خروج</button>
             </div>
         </div>
     </header>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('add', event)">إضافة</button>
-        <button class="tab-btn" onclick="switchTab('review', event)">مراجعة</button>
-        <button class="tab-btn" onclick="switchTab('quiz', event)">اختبار</button>
-        <button class="tab-btn" onclick="switchTab('manage', event)">إدارة</button>
-        <button class="tab-btn" onclick="switchTab('stats', event)">إحصائيات</button>
-        <button class="tab-btn" onclick="switchTab('backup', event)">نسخ احتياطي</button>
+        <button class="tab-btn active" data-tab="add">إضافة</button>
+        <button class="tab-btn" data-tab="review">مراجعة</button>
+        <button class="tab-btn" data-tab="quiz">اختبار</button>
+        <button class="tab-btn" data-tab="manage">إدارة</button>
+        <button class="tab-btn" data-tab="stats">إحصائيات</button>
+        <button class="tab-btn" data-tab="backup">نسخ احتياطي</button>
     </div>
 
     <div id="add" class="section active">
@@ -66,7 +514,7 @@
         </div>
         <div class="form-group">
             <label>التصنيف</label>
-            <input type="text" id="category" placeholder="مثال: Business, Marketing" list="categoriesList">
+            <input type="text" id="category" placeholder="مثال: Business" list="categoriesList">
             <datalist id="categoriesList"></datalist>
         </div>
         <div class="form-group">
@@ -77,7 +525,7 @@
                 <option value="hard">صعب</option>
             </select>
         </div>
-        <button class="btn btn-primary" onclick="addCard()">إضافة</button>
+        <button class="btn btn-primary" id="addCardBtn">إضافة</button>
     </div>
 
     <div id="review" class="section">
@@ -85,13 +533,13 @@
         <div class="review-filters">
             <div class="form-group">
                 <label>التصنيف</label>
-                <select id="reviewFilter" onchange="startReview()">
+                <select id="reviewFilter">
                     <option value="all">الكل</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>المستوى</label>
-                <select id="difficultyFilter" onchange="startReview()">
+                <select id="difficultyFilter">
                     <option value="all">الكل</option>
                     <option value="easy">سهل</option>
                     <option value="medium">متوسط</option>
@@ -101,31 +549,29 @@
         </div>
         
         <div id="reviewArea" style="display: none;">
-            <div class="flashcard-container" onclick="flipCard()">
+            <div class="flashcard-container" id="flashcardContainer">
                 <div class="flashcard" id="flashcard">
                     <div class="card-face card-front">
                         <span class="card-category" id="cardCat"></span>
                         <span class="card-difficulty" id="cardDiff"></span>
                         <h2 id="cardFront"></h2>
-                        <p class="card-hint">اضغط للقلب</p>
+                        <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 10px;">اضغط للقلب</p>
                     </div>
                     <div class="card-face card-back">
                         <h2 id="cardBack"></h2>
-                        <p id="cardExample" class="card-example"></p>
-                        <button class="btn-speak" onclick="event.stopPropagation(); speakWord()">نطق</button>
+                        <p id="cardExample" style="font-size: 0.9rem; font-style: italic; margin-top: 10px;"></p>
                     </div>
                 </div>
             </div>
             <div class="review-controls">
-                <button class="btn btn-danger" onclick="markDifficulty('hard')">صعب</button>
-                <button class="btn btn-warning" onclick="markDifficulty('medium')">متوسط</button>
-                <button class="btn btn-success" onclick="markDifficulty('easy')">سهل</button>
+                <button class="btn btn-danger" data-diff="hard">صعب</button>
+                <button class="btn btn-warning" data-diff="medium">متوسط</button>
+                <button class="btn btn-success" data-diff="easy">سهل</button>
             </div>
             <p class="review-progress" id="reviewProgress"></p>
         </div>
         <div id="emptyReview" class="empty-state" style="display: none;">
             <h3>لا توجد كلمات للمراجعة</h3>
-            <p>أضف كلمات جديدة أو غيّر الفلتر</p>
         </div>
     </div>
 
@@ -133,26 +579,26 @@
         <h2>الاختبار السريع</h2>
         <div class="quiz-setup" id="quizSetup">
             <p>اختبر نفسك في الكلمات التي تعلمتها</p>
-            <button class="btn btn-primary" onclick="startQuiz()">ابدأ الاختبار</button>
+            <button class="btn btn-primary" id="startQuizBtn">ابدأ الاختبار</button>
         </div>
         <div id="quizArea" style="display: none;">
             <div class="quiz-question">
                 <h3 id="quizQuestion"></h3>
                 <div class="quiz-options" id="quizOptions"></div>
             </div>
-            <p class="quiz-progress" id="quizProgress"></p>
+            <p class="review-progress" id="quizProgress"></p>
         </div>
         <div id="quizResult" style="display: none;">
             <h3>النتيجة</h3>
             <div class="quiz-score" id="quizScore"></div>
-            <button class="btn btn-primary" onclick="resetQuiz()">اختبار جديد</button>
+            <button class="btn btn-primary" id="resetQuizBtn">اختبار جديد</button>
         </div>
     </div>
 
     <div id="manage" class="section">
         <h2>إدارة البطاقات</h2>
         <div class="form-group">
-            <input type="text" id="searchInput" placeholder="بحث..." oninput="renderList()">
+            <input type="text" id="searchInput" placeholder="بحث...">
         </div>
         <div class="cards-list" id="cardsList"></div>
     </div>
@@ -177,28 +623,607 @@
                 <div class="stat-label">نسبة الإتقان</div>
             </div>
         </div>
-        <div class="stats-details">
-            <h3>توزيع حسب التصنيف</h3>
-            <div id="categoryStats"></div>
-            <h3>توزيع حسب الصعوبة</h3>
-            <div id="difficultyStats"></div>
-        </div>
     </div>
 
     <div id="backup" class="section">
         <h2>النسخ الاحتياطي</h2>
-        <p class="info-text">
+        <p style="color: var(--text-light); margin-bottom: 20px;">
             يتم حفظ بياناتك في متصفحك. يُنصح بتصدير بياناتك بشكل دوري.
         </p>
         <div class="backup-actions">
-            <button class="btn btn-primary" onclick="exportData()">تصدير البيانات</button>
-            <button class="btn btn-success" onclick="document.getElementById('importFile').click()">استيراد البيانات</button>
-            <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importData(event)">
-            <button class="btn btn-danger" onclick="clearAllData()">مسح جميع البيانات</button>
+            <button class="btn btn-primary" id="exportBtn">تصدير البيانات</button>
+            <button class="btn btn-success" id="importBtn">استيراد البيانات</button>
+            <input type="file" id="importFile" style="display: none;" accept=".json">
+            <button class="btn btn-danger" id="clearBtn">مسح جميع البيانات</button>
         </div>
     </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+// ============================================
+// 🔐 كلمة المرور
+// ============================================
+const APP_PASSWORD = "1234";
+
+// ============================================
+// متغيرات عامة
+// ============================================
+let cards = JSON.parse(localStorage.getItem('flashcards')) || [];
+let currentReviewCards = [];
+let currentCardIndex = 0;
+let quizCards = [];
+let quizIndex = 0;
+let quizScore = 0;
+
+// ============================================
+// تهيئة التطبيق
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ الصفحة تم تحميلها');
+    
+    // تحميل الوضع المحفوظ
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const themeBtn = document.getElementById('themeToggle');
+    if (themeBtn) {
+        themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    }
+    
+    // التحقق من تسجيل الدخول
+    checkAuth();
+    
+    if (sessionStorage.getItem('isLoggedIn') === 'true') {
+        initApp();
+    }
+    
+    // ربط الأحداث
+    bindEvents();
+});
+
+function bindEvents() {
+    // زر إظهار/إخفاء كلمة المرور
+    document.getElementById('togglePasswordBtn').addEventListener('click', function() {
+        const input = document.getElementById('passwordInput');
+        const btn = this;
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.textContent = 'إخفاء';
+        } else {
+            input.type = 'password';
+            btn.textContent = 'إظهار';
+        }
+    });
+    
+    // زر الدخول
+    document.getElementById('loginBtn').addEventListener('click', login);
+    
+    // Enter في حقل كلمة المرور
+    document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') login();
+    });
+    
+    // زر الخروج
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+    
+    // تبديل الوضع
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    
+    // التبويبات
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            switchTab(tabId, this);
+        });
+    });
+    
+    // إضافة بطاقة
+    document.getElementById('addCardBtn').addEventListener('click', addCard);
+    
+    // البحث
+    document.getElementById('searchInput').addEventListener('input', renderList);
+    
+    // فلاتر المراجعة
+    document.getElementById('reviewFilter').addEventListener('change', startReview);
+    document.getElementById('difficultyFilter').addEventListener('change', startReview);
+    
+    // قلب البطاقة
+    document.getElementById('flashcardContainer').addEventListener('click', flipCard);
+    
+    // أزرار الصعوبة
+    document.querySelectorAll('.review-controls .btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            markDifficulty(this.getAttribute('data-diff'));
+        });
+    });
+    
+    // الاختبار
+    document.getElementById('startQuizBtn').addEventListener('click', startQuiz);
+    document.getElementById('resetQuizBtn').addEventListener('click', resetQuiz);
+    
+    // النسخ الاحتياطي
+    document.getElementById('exportBtn').addEventListener('click', exportData);
+    document.getElementById('importBtn').addEventListener('click', function() {
+        document.getElementById('importFile').click();
+    });
+    document.getElementById('importFile').addEventListener('change', importData);
+    document.getElementById('clearBtn').addEventListener('click', clearAllData);
+}
+
+// ============================================
+// نظام تسجيل الدخول
+// ============================================
+function checkAuth() {
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+    if (isLoggedIn === 'true') {
+        showMainApp();
+    } else {
+        showLoginScreen();
+    }
+}
+
+function showLoginScreen() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('mainApp').style.display = 'none';
+}
+
+function showMainApp() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+}
+
+function login() {
+    const password = document.getElementById('passwordInput').value;
+    const errorMsg = document.getElementById('loginError');
+    
+    if (!password) {
+        errorMsg.textContent = 'الرجاء إدخال كلمة المرور';
+        return;
+    }
+    
+    if (password === APP_PASSWORD) {
+        sessionStorage.setItem('isLoggedIn', 'true');
+        errorMsg.textContent = '';
+        showMainApp();
+        initApp();
+    } else {
+        errorMsg.textContent = 'كلمة المرور غير صحيحة';
+        document.getElementById('passwordInput').value = '';
+    }
+}
+
+function logout() {
+    if (confirm('هل تريد تسجيل الخروج؟')) {
+        sessionStorage.removeItem('isLoggedIn');
+        document.getElementById('passwordInput').value = '';
+        showLoginScreen();
+    }
+}
+
+// ============================================
+// تهيئة التطبيق
+// ============================================
+function initApp() {
+    updateCategories();
+    renderList();
+    updateStats();
+}
+
+function saveData() {
+    localStorage.setItem('flashcards', JSON.stringify(cards));
+    updateCategories();
+    updateStats();
+}
+
+// ============================================
+// التبديل بين الأقسام
+// ============================================
+function switchTab(tabId, btn) {
+    document.querySelectorAll('.section').forEach(function(s) {
+        s.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+        b.classList.remove('active');
+    });
+    document.getElementById(tabId).classList.add('active');
+    btn.classList.add('active');
+    
+    if (tabId === 'review') startReview();
+    if (tabId === 'manage') renderList();
+    if (tabId === 'stats') updateStats();
+}
+
+// ============================================
+// إضافة بطاقة
+// ============================================
+function addCard() {
+    const en = document.getElementById('enWord').value.trim();
+    const ar = document.getElementById('arWord').value.trim();
+    const example = document.getElementById('example').value.trim();
+    const cat = document.getElementById('category').value.trim() || 'عام';
+    const difficulty = document.getElementById('difficulty').value;
+
+    if (!en || !ar) {
+        alert('الرجاء إدخال الكلمة والمعنى');
+        return;
+    }
+
+    cards.push({
+        id: Date.now(),
+        en: en,
+        ar: ar,
+        example: example,
+        category: cat,
+        difficulty: difficulty,
+        status: 'learning',
+        reviews: 0,
+        correctAnswers: 0,
+        dateAdded: new Date().toLocaleDateString('ar-EG')
+    });
+
+    saveData();
+    
+    document.getElementById('enWord').value = '';
+    document.getElementById('arWord').value = '';
+    document.getElementById('example').value = '';
+    document.getElementById('category').value = '';
+    document.getElementById('difficulty').value = 'medium';
+    
+    alert('تمت إضافة البطاقة');
+}
+
+// ============================================
+// تحديث القوائم
+// ============================================
+function updateCategories() {
+    const categories = [...new Set(cards.map(function(c) { return c.category; }))];
+    const datalist = document.getElementById('categoriesList');
+    const reviewFilter = document.getElementById('reviewFilter');
+    
+    datalist.innerHTML = categories.map(function(c) {
+        return '<option value="' + c + '">';
+    }).join('');
+    
+    reviewFilter.innerHTML = '<option value="all">الكل</option>' + 
+                             categories.map(function(c) {
+                                 return '<option value="' + c + '">' + c + '</option>';
+                             }).join('');
+}
+
+function updateStats() {
+    const total = cards.length;
+    const mastered = cards.filter(function(c) { return c.status === 'mastered'; }).length;
+    const learning = total - mastered;
+    const accuracy = total > 0 ? Math.round((mastered / total) * 100) : 0;
+    
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('learningCount').textContent = learning;
+    document.getElementById('masteredCount').textContent = mastered;
+    document.getElementById('accuracyRate').textContent = accuracy + '%';
+}
+
+// ============================================
+// عرض قائمة البطاقات
+// ============================================
+function renderList() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const list = document.getElementById('cardsList');
+    
+    const filtered = cards.filter(function(c) {
+        return c.en.toLowerCase().includes(search) || 
+               c.ar.toLowerCase().includes(search) ||
+               c.category.toLowerCase().includes(search);
+    });
+
+    if (filtered.length === 0) {
+        list.innerHTML = '<p class="empty-state">لا توجد بطاقات</p>';
+        return;
+    }
+
+    list.innerHTML = filtered.map(function(c) {
+        const diffColor = c.difficulty === 'easy' ? 'var(--success)' : 
+                          c.difficulty === 'medium' ? 'var(--warning)' : 'var(--danger)';
+        const diffLabel = c.difficulty === 'easy' ? 'سهل' : 
+                          c.difficulty === 'medium' ? 'متوسط' : 'صعب';
+        const statusColor = c.status === 'mastered' ? 'var(--success)' : 'var(--primary)';
+        const statusLabel = c.status === 'mastered' ? 'متقنة' : 'قيد التعلم';
+        
+        return '<div class="list-card">' +
+               '<button class="edit-btn" data-id="' + c.id + '">تعديل</button>' +
+               '<button class="delete-btn" data-id="' + c.id + '">حذف</button>' +
+               '<h4>' + c.en + '</h4>' +
+               '<p>' + c.ar + '</p>' +
+               (c.example ? '<p style="font-size: 0.85rem; font-style: italic; margin-top: 5px;">"' + c.example + '"</p>' : '') +
+               '<div>' +
+               '<span class="badge">' + c.category + '</span>' +
+               '<span class="badge" style="background: ' + diffColor + '">' + diffLabel + '</span>' +
+               '<span class="badge" style="background: ' + statusColor + '">' + statusLabel + '</span>' +
+               '</div>' +
+               '</div>';
+    }).join('');
+    
+    // ربط أزرار التعديل والحذف
+    list.querySelectorAll('.edit-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            editCard(parseInt(this.getAttribute('data-id')));
+        });
+    });
+    
+    list.querySelectorAll('.delete-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            deleteCard(parseInt(this.getAttribute('data-id')));
+        });
+    });
+}
+
+function deleteCard(id) {
+    if (confirm('هل أنت متأكد من حذف هذه البطاقة؟')) {
+        cards = cards.filter(function(c) { return c.id !== id; });
+        saveData();
+        renderList();
+    }
+}
+
+function editCard(id) {
+    const card = cards.find(function(c) { return c.id === id; });
+    if (!card) return;
+    
+    const newEn = prompt('الكلمة بالإنجليزية:', card.en);
+    if (newEn === null) return;
+    
+    const newAr = prompt('المعنى:', card.ar);
+    if (newAr === null) return;
+    
+    const newExample = prompt('مثال:', card.example || '');
+    if (newExample === null) return;
+    
+    const newCategory = prompt('التصنيف:', card.category);
+    if (newCategory === null) return;
+    
+    card.en = newEn;
+    card.ar = newAr;
+    card.example = newExample;
+    card.category = newCategory;
+    
+    saveData();
+    renderList();
+    alert('تم تحديث البطاقة');
+}
+
+// ============================================
+// وضع المراجعة
+// ============================================
+function startReview() {
+    const filter = document.getElementById('reviewFilter').value;
+    const diffFilter = document.getElementById('difficultyFilter').value;
+    
+    currentReviewCards = cards.filter(function(c) { return c.status === 'learning'; });
+    
+    if (filter !== 'all') {
+        currentReviewCards = currentReviewCards.filter(function(c) { return c.category === filter; });
+    }
+    
+    if (diffFilter !== 'all') {
+        currentReviewCards = currentReviewCards.filter(function(c) { return c.difficulty === diffFilter; });
+    }
+
+    currentCardIndex = 0;
+    showCurrentCard();
+}
+
+function showCurrentCard() {
+    const area = document.getElementById('reviewArea');
+    const empty = document.getElementById('emptyReview');
+    
+    if (currentReviewCards.length === 0 || currentCardIndex >= currentReviewCards.length) {
+        area.style.display = 'none';
+        empty.style.display = 'block';
+        return;
+    }
+
+    area.style.display = 'block';
+    empty.style.display = 'none';
+    
+    const card = currentReviewCards[currentCardIndex];
+    document.getElementById('cardFront').textContent = card.en;
+    document.getElementById('cardBack').textContent = card.ar;
+    document.getElementById('cardCat').textContent = card.category;
+    document.getElementById('cardExample').textContent = card.example ? '"' + card.example + '"' : '';
+    
+    const diffLabels = { easy: 'سهل', medium: 'متوسط', hard: 'صعب' };
+    document.getElementById('cardDiff').textContent = diffLabels[card.difficulty];
+    
+    document.getElementById('flashcard').classList.remove('flipped');
+    document.getElementById('reviewProgress').textContent = 
+        'البطاقة ' + (currentCardIndex + 1) + ' من ' + currentReviewCards.length;
+}
+
+function flipCard() {
+    document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function markDifficulty(difficulty) {
+    const card = currentReviewCards[currentCardIndex];
+    const originalCard = cards.find(function(c) { return c.id === card.id; });
+    
+    if (originalCard) {
+        originalCard.reviews++;
+        originalCard.difficulty = difficulty;
+        
+        if (difficulty === 'easy') {
+            originalCard.correctAnswers++;
+            if (originalCard.correctAnswers >= 3) {
+                originalCard.status = 'mastered';
+            }
+        }
+        
+        saveData();
+    }
+    
+    currentCardIndex++;
+    showCurrentCard();
+}
+
+// ============================================
+// وضع الاختبار
+// ============================================
+function startQuiz() {
+    if (cards.length < 4) {
+        alert('تحتاج إلى 4 كلمات على الأقل');
+        return;
+    }
+    
+    quizCards = cards.slice().sort(function() { return Math.random() - 0.5; }).slice(0, Math.min(10, cards.length));
+    quizIndex = 0;
+    quizScore = 0;
+    
+    document.getElementById('quizSetup').style.display = 'none';
+    document.getElementById('quizArea').style.display = 'block';
+    document.getElementById('quizResult').style.display = 'none';
+    
+    showQuizQuestion();
+}
+
+function showQuizQuestion() {
+    if (quizIndex >= quizCards.length) {
+        showQuizResult();
+        return;
+    }
+    
+    const currentCard = quizCards[quizIndex];
+    document.getElementById('quizQuestion').textContent = currentCard.en;
+    
+    let options = [currentCard.ar];
+    const otherCards = cards.filter(function(c) { return c.id !== currentCard.id; });
+    
+    while (options.length < 4 && otherCards.length > 0) {
+        const randomIndex = Math.floor(Math.random() * otherCards.length);
+        const randomCard = otherCards.splice(randomIndex, 1)[0];
+        if (options.indexOf(randomCard.ar) === -1) {
+            options.push(randomCard.ar);
+        }
+    }
+    
+    options = options.sort(function() { return Math.random() - 0.5; });
+    
+    const optionsDiv = document.getElementById('quizOptions');
+    optionsDiv.innerHTML = '';
+    
+    options.forEach(function(opt) {
+        const div = document.createElement('div');
+        div.className = 'quiz-option';
+        div.textContent = opt;
+        div.addEventListener('click', function() {
+            checkAnswer(opt, currentCard.ar);
+        });
+        optionsDiv.appendChild(div);
+    });
+    
+    document.getElementById('quizProgress').textContent = 
+        'السؤال ' + (quizIndex + 1) + ' من ' + quizCards.length;
+}
+
+function checkAnswer(selected, correct) {
+    const options = document.querySelectorAll('.quiz-option');
+    options.forEach(function(opt) {
+        opt.style.pointerEvents = 'none';
+        if (opt.textContent === correct) {
+            opt.classList.add('correct');
+        } else if (opt.textContent === selected && selected !== correct) {
+            opt.classList.add('wrong');
+        }
+    });
+    
+    if (selected === correct) {
+        quizScore++;
+    }
+    
+    setTimeout(function() {
+        quizIndex++;
+        showQuizQuestion();
+    }, 1500);
+}
+
+function showQuizResult() {
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('quizResult').style.display = 'block';
+    
+    const percentage = Math.round((quizScore / quizCards.length) * 100);
+    document.getElementById('quizScore').innerHTML = 
+        quizScore + ' / ' + quizCards.length + '<br>' +
+        '<span style="font-size: 1.5rem;">' + percentage + '%</span>';
+}
+
+function resetQuiz() {
+    document.getElementById('quizSetup').style.display = 'block';
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('quizResult').style.display = 'none';
+}
+
+// ============================================
+// النسخ الاحتياطي
+// ============================================
+function exportData() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cards, null, 2));
+    const a = document.createElement('a');
+    a.setAttribute("href", dataStr);
+    a.setAttribute("download", "flashcards_backup.json");
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+}
+
+function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const imported = JSON.parse(e.target.result);
+            if (Array.isArray(imported)) {
+                if (confirm('هل تريد استبدال البيانات الحالية؟')) {
+                    cards = imported;
+                } else {
+                    cards = cards.concat(imported);
+                }
+                saveData();
+                renderList();
+                alert('تم استيراد البيانات');
+            } else {
+                alert('ملف غير صالح');
+            }
+        } catch (err) {
+            alert('حدث خطأ في قراءة الملف');
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+}
+
+function clearAllData() {
+    if (confirm('تحذير: سيتم مسح جميع البيانات!')) {
+        if (confirm('هل أنت متأكد تماماً؟')) {
+            cards = [];
+            saveData();
+            renderList();
+            alert('تم مسح جميع البيانات');
+        }
+    }
+}
+
+// ============================================
+// الوضع الليلي/النهاري
+// ============================================
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    const themeBtn = document.getElementById('themeToggle');
+    themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+}
+</script>
+
 </body>
 </html>
