@@ -1,14 +1,6 @@
-const APP_PASSWORD = "hamza||1234";
-const MAX_ATTEMPTS = 5;
-const LOCKOUT_TIME = 30000;
-const SESSION_TIMEOUT = 30 * 60 * 1000;
-
 let cards = JSON.parse(localStorage.getItem('flashcards')) || [];
 let currentReviewCards = [];
 let currentCardIndex = 0;
-let loginAttempts = 0;
-let isLocked = false;
-let sessionTimer;
 let quizCards = [];
 let quizIndex = 0;
 let quizScore = 0;
@@ -22,129 +14,41 @@ document.addEventListener('DOMContentLoaded', function() {
         themeBtn.innerText = savedTheme === 'dark' ? '☀️' : '🌙';
     }
     
-    const toggleBtn = document.getElementById('togglePasswordBtn');
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', function() {
-            const input = document.getElementById('passwordInput');
-            if (input.type === 'password') {
-                input.type = 'text';
-                toggleBtn.innerText = 'إخفاء';
-            } else {
-                input.type = 'password';
-                toggleBtn.innerText = 'إظهار';
-            }
-        });
-    }
-    
-    const passwordInput = document.getElementById('passwordInput');
-    if (passwordInput) {
-        passwordInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                login();
-            }
-        });
-    }
-    
-    checkAuth();
-    
-    if (sessionStorage.getItem('isLoggedIn') === 'true') {
-        initApp();
-    }
-    
-    document.addEventListener('click', function() {
-        if (sessionStorage.getItem('isLoggedIn') === 'true') {
-            resetSessionTimer();
-        }
-    });
+    initApp();
+    bindEvents();
 });
 
-function checkAuth() {
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-    const loginTime = sessionStorage.getItem('loginTime');
+function bindEvents() {
+    document.querySelector('.theme-toggle').addEventListener('click', toggleTheme);
     
-    if (isLoggedIn === 'true' && loginTime) {
-        const timeDiff = Date.now() - parseInt(loginTime);
-        if (timeDiff < SESSION_TIMEOUT) {
-            showMainApp();
-            resetSessionTimer();
-            return;
-        } else {
-            logout(true);
-            return;
-        }
-    }
-    showLoginScreen();
-}
-
-function showLoginScreen() {
-    document.getElementById('loginScreen').style.display = 'flex';
-    document.getElementById('mainApp').style.display = 'none';
-}
-
-function showMainApp() {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'block';
-}
-
-function login() {
-    if (isLocked) {
-        alert('تم قفل تسجيل الدخول مؤقتاً');
-        return;
-    }
-
-    const password = document.getElementById('passwordInput').value;
-    const errorMsg = document.getElementById('loginError');
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            switchTab(tabId, this);
+        });
+    });
     
-    if (!password) {
-        errorMsg.textContent = 'الرجاء إدخال كلمة المرور';
-        return;
-    }
-
-    if (password === APP_PASSWORD) {
-        sessionStorage.setItem('isLoggedIn', 'true');
-        sessionStorage.setItem('loginTime', Date.now().toString());
-        errorMsg.textContent = '';
-        loginAttempts = 0;
-        showMainApp();
-        initApp();
-        resetSessionTimer();
-    } else {
-        loginAttempts++;
-        const attemptsRemaining = MAX_ATTEMPTS - loginAttempts;
-        
-        if (loginAttempts >= MAX_ATTEMPTS) {
-            isLocked = true;
-            errorMsg.textContent = 'تم قفل تسجيل الدخول';
-            
-            setTimeout(function() {
-                isLocked = false;
-                loginAttempts = 0;
-                errorMsg.textContent = '';
-            }, LOCKOUT_TIME);
-        } else {
-            errorMsg.textContent = 'كلمة المرور غير صحيحة. المحاولات المتبقية: ' + attemptsRemaining;
-        }
-        
-        document.getElementById('passwordInput').value = '';
-    }
-}
-
-function logout(autoLogout = false) {
-    if (autoLogout || confirm('هل تريد تسجيل الخروج؟')) {
-        sessionStorage.removeItem('isLoggedIn');
-        sessionStorage.removeItem('loginTime');
-        document.getElementById('passwordInput').value = '';
-        clearTimeout(sessionTimer);
-        showLoginScreen();
-    }
-}
-
-function resetSessionTimer() {
-    clearTimeout(sessionTimer);
-    sessionTimer = setTimeout(function() {
-        alert('انتهت الجلسة');
-        logout(true);
-    }, SESSION_TIMEOUT);
+    document.getElementById('addCardBtn').addEventListener('click', addCard);
+    document.getElementById('searchInput').addEventListener('input', renderList);
+    document.getElementById('reviewFilter').addEventListener('change', startReview);
+    document.getElementById('difficultyFilter').addEventListener('change', startReview);
+    document.getElementById('flashcardContainer').addEventListener('click', flipCard);
+    
+    document.querySelectorAll('.review-controls .btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            markDifficulty(this.getAttribute('data-diff'));
+        });
+    });
+    
+    document.getElementById('startQuizBtn').addEventListener('click', startQuiz);
+    document.getElementById('resetQuizBtn').addEventListener('click', resetQuiz);
+    
+    document.getElementById('exportBtn').addEventListener('click', exportData);
+    document.getElementById('importBtn').addEventListener('click', function() {
+        document.getElementById('importFile').click();
+    });
+    document.getElementById('importFile').addEventListener('change', importData);
+    document.getElementById('clearBtn').addEventListener('click', clearAllData);
 }
 
 function initApp() {
@@ -159,11 +63,15 @@ function saveData() {
     updateStats();
 }
 
-function switchTab(tabId, event) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+function switchTab(tabId, btn) {
+    document.querySelectorAll('.section').forEach(function(s) {
+        s.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+        b.classList.remove('active');
+    });
     document.getElementById(tabId).classList.add('active');
-    event.target.classList.add('active');
+    btn.classList.add('active');
     
     if (tabId === 'review') startReview();
     if (tabId === 'manage') renderList();
@@ -207,18 +115,23 @@ function addCard() {
 }
 
 function updateCategories() {
-    const categories = [...new Set(cards.map(c => c.category))];
+    const categories = [...new Set(cards.map(function(c) { return c.category; }))];
     const datalist = document.getElementById('categoriesList');
     const reviewFilter = document.getElementById('reviewFilter');
     
-    datalist.innerHTML = categories.map(c => '<option value="' + c + '">').join('');
+    datalist.innerHTML = categories.map(function(c) {
+        return '<option value="' + c + '">';
+    }).join('');
+    
     reviewFilter.innerHTML = '<option value="all">الكل</option>' + 
-                             categories.map(c => '<option value="' + c + '">' + c + '</option>').join('');
+                             categories.map(function(c) {
+                                 return '<option value="' + c + '">' + c + '</option>';
+                             }).join('');
 }
 
 function updateStats() {
     const total = cards.length;
-    const mastered = cards.filter(c => c.status === 'mastered').length;
+    const mastered = cards.filter(function(c) { return c.status === 'mastered'; }).length;
     const learning = total - mastered;
     const accuracy = total > 0 ? Math.round((mastered / total) * 100) : 0;
     
@@ -228,7 +141,7 @@ function updateStats() {
     document.getElementById('accuracyRate').innerText = accuracy + '%';
     
     const categoryStats = {};
-    cards.forEach(c => {
+    cards.forEach(function(c) {
         if (!categoryStats[c.category]) {
             categoryStats[c.category] = 0;
         }
@@ -256,7 +169,7 @@ function updateStats() {
     }
     
     const difficultyStats = { easy: 0, medium: 0, hard: 0 };
-    cards.forEach(c => {
+    cards.forEach(function(c) {
         difficultyStats[c.difficulty]++;
     });
     
@@ -286,47 +199,62 @@ function renderList() {
     const search = document.getElementById('searchInput').value.toLowerCase();
     const list = document.getElementById('cardsList');
     
-    const filtered = cards.filter(c => 
-        c.en.toLowerCase().includes(search) || 
-        c.ar.toLowerCase().includes(search) ||
-        c.category.toLowerCase().includes(search)
-    );
+    const filtered = cards.filter(function(c) {
+        return c.en.toLowerCase().includes(search) || 
+               c.ar.toLowerCase().includes(search) ||
+               c.category.toLowerCase().includes(search);
+    });
 
     if (filtered.length === 0) {
         list.innerHTML = '<p class="empty-state">لا توجد بطاقات</p>';
         return;
     }
 
-    list.innerHTML = filtered.map(c => 
-        '<div class="list-card">' +
-        '<button class="edit-btn" onclick="editCard(' + c.id + ')">تعديل</button>' +
-        '<button class="delete-btn" onclick="deleteCard(' + c.id + ')">حذف</button>' +
-        '<h4>' + c.en + '</h4>' +
-        '<p>' + c.ar + '</p>' +
-        (c.example ? '<p style="font-size: 0.85rem; font-style: italic; margin-top: 5px;">"' + c.example + '"</p>' : '') +
-        '<div>' +
-        '<span class="badge">' + c.category + '</span>' +
-        '<span class="badge" style="background: ' + (c.difficulty === 'easy' ? 'var(--success)' : c.difficulty === 'medium' ? 'var(--warning)' : 'var(--danger)') + '">' +
-        (c.difficulty === 'easy' ? 'سهل' : c.difficulty === 'medium' ? 'متوسط' : 'صعب') +
-        '</span>' +
-        '<span class="badge" style="background: ' + (c.status === 'mastered' ? 'var(--success)' : 'var(--primary)') + '">' +
-        (c.status === 'mastered' ? 'متقنة' : 'قيد التعلم') +
-        '</span>' +
-        '</div>' +
-        '</div>'
-    ).join('');
+    list.innerHTML = filtered.map(function(c) {
+        const diffColor = c.difficulty === 'easy' ? 'var(--success)' : 
+                          c.difficulty === 'medium' ? 'var(--warning)' : 'var(--danger)';
+        const diffLabel = c.difficulty === 'easy' ? 'سهل' : 
+                          c.difficulty === 'medium' ? 'متوسط' : 'صعب';
+        const statusColor = c.status === 'mastered' ? 'var(--success)' : 'var(--primary)';
+        const statusLabel = c.status === 'mastered' ? 'متقنة' : 'قيد التعلم';
+        
+        return '<div class="list-card">' +
+               '<button class="edit-btn" data-id="' + c.id + '">تعديل</button>' +
+               '<button class="delete-btn" data-id="' + c.id + '">حذف</button>' +
+               '<h4>' + c.en + '</h4>' +
+               '<p>' + c.ar + '</p>' +
+               (c.example ? '<p style="font-size: 0.85rem; font-style: italic; margin-top: 5px;">"' + c.example + '"</p>' : '') +
+               '<div>' +
+               '<span class="badge">' + c.category + '</span>' +
+               '<span class="badge" style="background: ' + diffColor + '">' + diffLabel + '</span>' +
+               '<span class="badge" style="background: ' + statusColor + '">' + statusLabel + '</span>' +
+               '</div>' +
+               '</div>';
+    }).join('');
+    
+    list.querySelectorAll('.edit-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            editCard(parseInt(this.getAttribute('data-id')));
+        });
+    });
+    
+    list.querySelectorAll('.delete-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            deleteCard(parseInt(this.getAttribute('data-id')));
+        });
+    });
 }
 
 function deleteCard(id) {
     if (confirm('هل أنت متأكد من حذف هذه البطاقة؟')) {
-        cards = cards.filter(c => c.id !== id);
+        cards = cards.filter(function(c) { return c.id !== id; });
         saveData();
         renderList();
     }
 }
 
 function editCard(id) {
-    const card = cards.find(c => c.id === id);
+    const card = cards.find(function(c) { return c.id === id; });
     if (!card) return;
     
     const newEn = prompt('الكلمة بالإنجليزية:', card.en);
@@ -355,14 +283,14 @@ function startReview() {
     const filter = document.getElementById('reviewFilter').value;
     const diffFilter = document.getElementById('difficultyFilter').value;
     
-    currentReviewCards = cards.filter(c => c.status === 'learning');
+    currentReviewCards = cards.filter(function(c) { return c.status === 'learning'; });
     
     if (filter !== 'all') {
-        currentReviewCards = currentReviewCards.filter(c => c.category === filter);
+        currentReviewCards = currentReviewCards.filter(function(c) { return c.category === filter; });
     }
     
     if (diffFilter !== 'all') {
-        currentReviewCards = currentReviewCards.filter(c => c.difficulty === diffFilter);
+        currentReviewCards = currentReviewCards.filter(function(c) { return c.difficulty === diffFilter; });
     }
 
     currentCardIndex = 0;
@@ -400,21 +328,9 @@ function flipCard() {
     document.getElementById('flashcard').classList.toggle('flipped');
 }
 
-function speakWord() {
-    const card = currentReviewCards[currentCardIndex];
-    if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(card.en);
-        utterance.lang = 'en-US';
-        utterance.rate = 0.8;
-        speechSynthesis.speak(utterance);
-    } else {
-        alert('المتصفح لا يدعم ميزة النطق');
-    }
-}
-
 function markDifficulty(difficulty) {
     const card = currentReviewCards[currentCardIndex];
-    const originalCard = cards.find(c => c.id === card.id);
+    const originalCard = cards.find(function(c) { return c.id === card.id; });
     
     if (originalCard) {
         originalCard.reviews++;
@@ -430,10 +346,6 @@ function markDifficulty(difficulty) {
         saveData();
     }
     
-    nextCard();
-}
-
-function nextCard() {
     currentCardIndex++;
     showCurrentCard();
 }
@@ -444,7 +356,7 @@ function startQuiz() {
         return;
     }
     
-    quizCards = [...cards].sort(() => Math.random() - 0.5).slice(0, Math.min(10, cards.length));
+    quizCards = cards.slice().sort(function() { return Math.random() - 0.5; }).slice(0, Math.min(10, cards.length));
     quizIndex = 0;
     quizScore = 0;
     
@@ -465,24 +377,30 @@ function showQuizQuestion() {
     document.getElementById('quizQuestion').innerText = currentCard.en;
     
     let options = [currentCard.ar];
-    const otherCards = cards.filter(c => c.id !== currentCard.id);
+    const otherCards = cards.filter(function(c) { return c.id !== currentCard.id; });
     
     while (options.length < 4 && otherCards.length > 0) {
         const randomIndex = Math.floor(Math.random() * otherCards.length);
         const randomCard = otherCards.splice(randomIndex, 1)[0];
-        if (!options.includes(randomCard.ar)) {
+        if (options.indexOf(randomCard.ar) === -1) {
             options.push(randomCard.ar);
         }
     }
     
-    options = options.sort(() => Math.random() - 0.5);
+    options = options.sort(function() { return Math.random() - 0.5; });
     
     const optionsDiv = document.getElementById('quizOptions');
-    optionsDiv.innerHTML = options.map(function(opt) {
-        const safeOpt = opt.replace(/'/g, "\\'").replace(/"/g, '\\"');
-        const safeCorrect = currentCard.ar.replace(/'/g, "\\'").replace(/"/g, '\\"');
-        return '<div class="quiz-option" onclick="checkAnswer(\'' + safeOpt + '\', \'' + safeCorrect + '\')">' + opt + '</div>';
-    }).join('');
+    optionsDiv.innerHTML = '';
+    
+    options.forEach(function(opt) {
+        const div = document.createElement('div');
+        div.className = 'quiz-option';
+        div.textContent = opt;
+        div.addEventListener('click', function() {
+            checkAnswer(opt, currentCard.ar);
+        });
+        optionsDiv.appendChild(div);
+    });
     
     document.getElementById('quizProgress').innerText = 
         'السؤال ' + (quizIndex + 1) + ' من ' + quizCards.length;
@@ -492,9 +410,9 @@ function checkAnswer(selected, correct) {
     const options = document.querySelectorAll('.quiz-option');
     options.forEach(function(opt) {
         opt.style.pointerEvents = 'none';
-        if (opt.innerText === correct) {
+        if (opt.textContent === correct) {
             opt.classList.add('correct');
-        } else if (opt.innerText === selected && selected !== correct) {
+        } else if (opt.textContent === selected && selected !== correct) {
             opt.classList.add('wrong');
         }
     });
@@ -527,12 +445,12 @@ function resetQuiz() {
 
 function exportData() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cards, null, 2));
-    const downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", "flashcards_backup_" + new Date().toISOString().split('T')[0] + ".json");
-    document.body.appendChild(downloadAnchorNode);
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
+    const a = document.createElement('a');
+    a.setAttribute("href", dataStr);
+    a.setAttribute("download", "flashcards_backup_" + new Date().toISOString().split('T')[0] + ".json");
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
 }
 
 function importData(event) {
@@ -547,7 +465,7 @@ function importData(event) {
                 if (confirm('هل تريد استبدال البيانات الحالية؟')) {
                     cards = imported;
                 } else {
-                    cards = [...cards, ...imported];
+                    cards = cards.concat(imported);
                 }
                 saveData();
                 renderList();

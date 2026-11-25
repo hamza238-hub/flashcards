@@ -41,66 +41,6 @@
             min-height: 100vh;
         }
 
-        .login-screen {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 90vh;
-        }
-
-        .login-box {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-            max-width: 400px;
-            width: 100%;
-        }
-
-        .login-box h1 {
-            color: var(--primary);
-            margin-bottom: 8px;
-            font-size: 1.8rem;
-        }
-
-        .login-box .subtitle {
-            color: var(--text-light);
-            margin-bottom: 30px;
-        }
-
-        .password-wrapper {
-            position: relative;
-        }
-
-        .password-wrapper input {
-            padding-left: 70px;
-        }
-
-        .toggle-password {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--primary);
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-
-        .btn-block {
-            width: 100%;
-            padding: 12px;
-            margin-top: 15px;
-        }
-
-        .error-msg {
-            color: var(--danger);
-            margin-top: 10px;
-            font-size: 0.875rem;
-            min-height: 20px;
-        }
-
         .container {
             max-width: 1000px;
             margin: 0 auto;
@@ -137,7 +77,7 @@
             gap: 10px;
         }
 
-        .theme-toggle, .logout-btn {
+        .theme-toggle {
             background: var(--bg);
             color: var(--text);
             border: 1px solid var(--border);
@@ -456,26 +396,7 @@
 </head>
 <body>
 
-<div id="loginScreen" class="login-screen">
-    <div class="login-box">
-        <h1>Flashcards Pro</h1>
-        <p class="subtitle">أداة إدارة البطاقات التعليمية</p>
-        
-        <div class="form-group">
-            <label>كلمة المرور</label>
-            <div class="password-wrapper">
-                <input type="password" id="passwordInput" placeholder="أدخل كلمة المرور">
-                <button type="button" id="togglePasswordBtn" class="toggle-password">إظهار</button>
-            </div>
-        </div>
-        
-        <button type="button" id="loginBtn" class="btn btn-primary btn-block">دخول</button>
-        
-        <p id="loginError" class="error-msg"></p>
-    </div>
-</div>
-
-<div id="mainApp" class="container" style="display: none;">
+<div class="container">
     <header>
         <div class="header-content">
             <div>
@@ -484,7 +405,6 @@
             </div>
             <div class="header-actions">
                 <button class="theme-toggle" id="themeToggle">🌙</button>
-                <button class="logout-btn" id="logoutBtn">خروج</button>
             </div>
         </div>
     </header>
@@ -640,14 +560,6 @@
 </div>
 
 <script>
-// ============================================
-// 🔐 كلمة المرور
-// ============================================
-const APP_PASSWORD = "1234";
-
-// ============================================
-// متغيرات عامة
-// ============================================
 let cards = JSON.parse(localStorage.getItem('flashcards')) || [];
 let currentReviewCards = [];
 let currentCardIndex = 0;
@@ -655,13 +567,7 @@ let quizCards = [];
 let quizIndex = 0;
 let quizScore = 0;
 
-// ============================================
-// تهيئة التطبيق
-// ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('✅ الصفحة تم تحميلها');
-    
-    // تحميل الوضع المحفوظ
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     const themeBtn = document.getElementById('themeToggle');
@@ -669,46 +575,13 @@ document.addEventListener('DOMContentLoaded', function() {
         themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
     }
     
-    // التحقق من تسجيل الدخول
-    checkAuth();
-    
-    if (sessionStorage.getItem('isLoggedIn') === 'true') {
-        initApp();
-    }
-    
-    // ربط الأحداث
+    initApp();
     bindEvents();
 });
 
 function bindEvents() {
-    // زر إظهار/إخفاء كلمة المرور
-    document.getElementById('togglePasswordBtn').addEventListener('click', function() {
-        const input = document.getElementById('passwordInput');
-        const btn = this;
-        if (input.type === 'password') {
-            input.type = 'text';
-            btn.textContent = 'إخفاء';
-        } else {
-            input.type = 'password';
-            btn.textContent = 'إظهار';
-        }
-    });
-    
-    // زر الدخول
-    document.getElementById('loginBtn').addEventListener('click', login);
-    
-    // Enter في حقل كلمة المرور
-    document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') login();
-    });
-    
-    // زر الخروج
-    document.getElementById('logoutBtn').addEventListener('click', logout);
-    
-    // تبديل الوضع
     document.getElementById('themeToggle').addEventListener('click', toggleTheme);
     
-    // التبويبات
     document.querySelectorAll('.tab-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
             const tabId = this.getAttribute('data-tab');
@@ -716,31 +589,21 @@ function bindEvents() {
         });
     });
     
-    // إضافة بطاقة
     document.getElementById('addCardBtn').addEventListener('click', addCard);
-    
-    // البحث
     document.getElementById('searchInput').addEventListener('input', renderList);
-    
-    // فلاتر المراجعة
     document.getElementById('reviewFilter').addEventListener('change', startReview);
     document.getElementById('difficultyFilter').addEventListener('change', startReview);
-    
-    // قلب البطاقة
     document.getElementById('flashcardContainer').addEventListener('click', flipCard);
     
-    // أزرار الصعوبة
     document.querySelectorAll('.review-controls .btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
             markDifficulty(this.getAttribute('data-diff'));
         });
     });
     
-    // الاختبار
     document.getElementById('startQuizBtn').addEventListener('click', startQuiz);
     document.getElementById('resetQuizBtn').addEventListener('click', resetQuiz);
     
-    // النسخ الاحتياطي
     document.getElementById('exportBtn').addEventListener('click', exportData);
     document.getElementById('importBtn').addEventListener('click', function() {
         document.getElementById('importFile').click();
@@ -749,59 +612,6 @@ function bindEvents() {
     document.getElementById('clearBtn').addEventListener('click', clearAllData);
 }
 
-// ============================================
-// نظام تسجيل الدخول
-// ============================================
-function checkAuth() {
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-    if (isLoggedIn === 'true') {
-        showMainApp();
-    } else {
-        showLoginScreen();
-    }
-}
-
-function showLoginScreen() {
-    document.getElementById('loginScreen').style.display = 'flex';
-    document.getElementById('mainApp').style.display = 'none';
-}
-
-function showMainApp() {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'block';
-}
-
-function login() {
-    const password = document.getElementById('passwordInput').value;
-    const errorMsg = document.getElementById('loginError');
-    
-    if (!password) {
-        errorMsg.textContent = 'الرجاء إدخال كلمة المرور';
-        return;
-    }
-    
-    if (password === APP_PASSWORD) {
-        sessionStorage.setItem('isLoggedIn', 'true');
-        errorMsg.textContent = '';
-        showMainApp();
-        initApp();
-    } else {
-        errorMsg.textContent = 'كلمة المرور غير صحيحة';
-        document.getElementById('passwordInput').value = '';
-    }
-}
-
-function logout() {
-    if (confirm('هل تريد تسجيل الخروج؟')) {
-        sessionStorage.removeItem('isLoggedIn');
-        document.getElementById('passwordInput').value = '';
-        showLoginScreen();
-    }
-}
-
-// ============================================
-// تهيئة التطبيق
-// ============================================
 function initApp() {
     updateCategories();
     renderList();
@@ -814,9 +624,6 @@ function saveData() {
     updateStats();
 }
 
-// ============================================
-// التبديل بين الأقسام
-// ============================================
 function switchTab(tabId, btn) {
     document.querySelectorAll('.section').forEach(function(s) {
         s.classList.remove('active');
@@ -832,9 +639,6 @@ function switchTab(tabId, btn) {
     if (tabId === 'stats') updateStats();
 }
 
-// ============================================
-// إضافة بطاقة
-// ============================================
 function addCard() {
     const en = document.getElementById('enWord').value.trim();
     const ar = document.getElementById('arWord').value.trim();
@@ -871,9 +675,6 @@ function addCard() {
     alert('تمت إضافة البطاقة');
 }
 
-// ============================================
-// تحديث القوائم
-// ============================================
 function updateCategories() {
     const categories = [...new Set(cards.map(function(c) { return c.category; }))];
     const datalist = document.getElementById('categoriesList');
@@ -901,9 +702,6 @@ function updateStats() {
     document.getElementById('accuracyRate').textContent = accuracy + '%';
 }
 
-// ============================================
-// عرض قائمة البطاقات
-// ============================================
 function renderList() {
     const search = document.getElementById('searchInput').value.toLowerCase();
     const list = document.getElementById('cardsList');
@@ -941,7 +739,6 @@ function renderList() {
                '</div>';
     }).join('');
     
-    // ربط أزرار التعديل والحذف
     list.querySelectorAll('.edit-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
             editCard(parseInt(this.getAttribute('data-id')));
@@ -989,9 +786,6 @@ function editCard(id) {
     alert('تم تحديث البطاقة');
 }
 
-// ============================================
-// وضع المراجعة
-// ============================================
 function startReview() {
     const filter = document.getElementById('reviewFilter').value;
     const diffFilter = document.getElementById('difficultyFilter').value;
@@ -1063,9 +857,6 @@ function markDifficulty(difficulty) {
     showCurrentCard();
 }
 
-// ============================================
-// وضع الاختبار
-// ============================================
 function startQuiz() {
     if (cards.length < 4) {
         alert('تحتاج إلى 4 كلمات على الأقل');
@@ -1159,9 +950,6 @@ function resetQuiz() {
     document.getElementById('quizResult').style.display = 'none';
 }
 
-// ============================================
-// النسخ الاحتياطي
-// ============================================
 function exportData() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cards, null, 2));
     const a = document.createElement('a');
@@ -1211,9 +999,6 @@ function clearAllData() {
     }
 }
 
-// ============================================
-// الوضع الليلي/النهاري
-// ============================================
 function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
