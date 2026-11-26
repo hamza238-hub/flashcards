@@ -62,15 +62,8 @@
             gap: 15px;
         }
 
-        header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 4px;
-        }
-
-        header p {
-            color: var(--text-light);
-            font-size: 0.875rem;
-        }
+        header h1 { font-size: 1.5rem; margin-bottom: 4px; }
+        header p { color: var(--text-light); font-size: 0.875rem; }
 
         .theme-toggle {
             background: var(--bg);
@@ -114,18 +107,10 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
-        .section.active {
-            display: block;
-        }
+        .section.active { display: block; }
+        .section h2 { margin-bottom: 20px; font-size: 1.25rem; }
 
-        .section h2 {
-            margin-bottom: 20px;
-            font-size: 1.25rem;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
+        .form-group { margin-bottom: 16px; }
 
         label {
             display: block;
@@ -150,10 +135,7 @@
             border-color: var(--primary);
         }
 
-        textarea {
-            resize: vertical;
-            min-height: 60px;
-        }
+        textarea { resize: vertical; min-height: 60px; }
 
         .btn {
             padding: 10px 20px;
@@ -169,18 +151,18 @@
         .btn-warning { background: var(--warning); color: white; }
         .btn-danger { background: var(--danger); color: white; }
         .btn-secondary { background: var(--border); color: var(--text); }
+        .btn:hover { opacity: 0.9; }
 
-        .btn:hover {
-            opacity: 0.9;
+        /* ====== Flashcard محدّث ====== */
+        .flashcard-wrapper {
+            max-width: 500px;
+            margin: 25px auto;
         }
 
-        /* Flashcard */
         .flashcard-container {
             perspective: 1000px;
             width: 100%;
-            max-width: 400px;
-            height: 250px;
-            margin: 25px auto;
+            height: 280px;
             cursor: pointer;
         }
 
@@ -192,9 +174,7 @@
             transition: transform 0.6s;
         }
 
-        .flashcard.flipped {
-            transform: rotateY(180deg);
-        }
+        .flashcard.flipped { transform: rotateY(180deg); }
 
         .card-face {
             position: absolute;
@@ -221,10 +201,7 @@
             transform: rotateY(180deg);
         }
 
-        .card-face h2 {
-            font-size: 1.75rem;
-            margin-bottom: 10px;
-        }
+        .card-face h2 { font-size: 1.75rem; margin-bottom: 10px; }
 
         .card-category, .card-difficulty {
             position: absolute;
@@ -236,6 +213,114 @@
 
         .card-category { top: 12px; right: 12px; }
         .card-difficulty { top: 12px; left: 12px; }
+
+        /* ====== حقل الإدخال الذاتي ====== */
+        .self-test-box {
+            width: 100%;
+            margin-top: 15px;
+            max-width: 350px;
+        }
+
+        .self-test-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .self-test-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .self-test-input:focus {
+            outline: none;
+            border-color: white;
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .self-test-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .self-test-btn {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            transition: 0.2s;
+        }
+
+        .self-test-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* ====== مقارنة الإجابة ====== */
+        .answer-comparison {
+            width: 100%;
+            max-width: 380px;
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            text-align: center;
+        }
+
+        .answer-box {
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .answer-box-label {
+            font-size: 0.75rem;
+            opacity: 0.85;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .answer-box-text {
+            font-size: 1rem;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .answer-box.correct {
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid white;
+        }
+
+        .answer-box.wrong {
+            background: rgba(239, 68, 68, 0.3);
+            border: 2px solid #fca5a5;
+        }
+
+        .answer-box.empty {
+            opacity: 0.6;
+            font-style: italic;
+        }
+
+        .card-example {
+            font-size: 0.9rem;
+            font-style: italic;
+            margin-top: 10px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            width: 100%;
+            max-width: 380px;
+        }
 
         .review-filters {
             display: grid;
@@ -273,16 +358,8 @@
             position: relative;
         }
 
-        .list-card h4 {
-            color: var(--primary);
-            margin-bottom: 6px;
-        }
-
-        .list-card p {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-        }
+        .list-card h4 { color: var(--primary); margin-bottom: 6px; }
+        .list-card p { color: var(--text-light); font-size: 0.9rem; margin-bottom: 8px; }
 
         .list-card .badge {
             display: inline-block;
@@ -328,14 +405,9 @@
             margin-bottom: 4px;
         }
 
-        .stat-label {
-            color: var(--text-light);
-            font-size: 0.85rem;
-        }
+        .stat-label { color: var(--text-light); font-size: 0.85rem; }
 
-        .stat-bar {
-            margin-bottom: 12px;
-        }
+        .stat-bar { margin-bottom: 12px; }
 
         .stat-bar-label {
             display: flex;
@@ -362,10 +434,7 @@
             padding: 30px 20px;
         }
 
-        .quiz-question h3 {
-            font-size: 1.5rem;
-            margin-bottom: 25px;
-        }
+        .quiz-question h3 { font-size: 1.5rem; margin-bottom: 25px; }
 
         .quiz-options {
             display: grid;
@@ -383,15 +452,8 @@
             cursor: pointer;
         }
 
-        .quiz-option.correct {
-            background: var(--success);
-            color: white;
-        }
-
-        .quiz-option.wrong {
-            background: var(--danger);
-            color: white;
-        }
+        .quiz-option.correct { background: var(--success); color: white; }
+        .quiz-option.wrong { background: var(--danger); color: white; }
 
         .quiz-score {
             font-size: 2.5rem;
@@ -400,11 +462,7 @@
             margin: 20px 0;
         }
 
-        .backup-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+        .backup-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
         .empty-state {
             text-align: center;
@@ -412,7 +470,7 @@
             color: var(--text-light);
         }
 
-        /* ====== جدول الاستيراد الجماعي ====== */
+        /* ====== الاستيراد الجماعي ====== */
         .bulk-info {
             background: var(--bg);
             padding: 15px;
@@ -428,7 +486,6 @@
             gap: 10px;
             margin-bottom: 15px;
             flex-wrap: wrap;
-            align-items: center;
         }
 
         .bulk-table-wrapper {
@@ -500,10 +557,6 @@
             width: 40px;
         }
 
-        .bulk-table .row-delete:hover {
-            background: var(--bg);
-        }
-
         .bulk-actions {
             display: flex;
             gap: 10px;
@@ -517,9 +570,7 @@
             font-size: 0.9rem;
         }
 
-        .bulk-counter strong {
-            color: var(--primary);
-        }
+        .bulk-counter strong { color: var(--primary); }
 
         .toast {
             position: fixed;
@@ -537,18 +588,14 @@
             pointer-events: none;
         }
 
-        .toast.show {
-            opacity: 1;
-        }
-
-        .toast.error {
-            background: var(--danger);
-        }
+        .toast.show { opacity: 1; }
+        .toast.error { background: var(--danger); }
 
         @media (max-width: 768px) {
-            .flashcard-container { height: 220px; }
+            .flashcard-container { height: 320px; }
             .review-filters { grid-template-columns: 1fr; }
             .quiz-options { grid-template-columns: 1fr; }
+            .answer-comparison { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -577,7 +624,7 @@
         <button class="tab-btn" data-tab="backup">نسخ احتياطي</button>
     </div>
 
-    <!-- إضافة بطاقة واحدة -->
+    <!-- إضافة بطاقة -->
     <div id="add" class="section active">
         <h2>إضافة بطاقة جديدة</h2>
         <div class="form-group">
@@ -608,21 +655,18 @@
         <button class="btn btn-primary" id="addCardBtn">إضافة</button>
     </div>
 
-    <!-- ====== تبويب الاستيراد الجماعي ====== -->
+    <!-- الاستيراد الجماعي -->
     <div id="bulk" class="section">
         <h2>استيراد جماعي (جدول)</h2>
         <div class="bulk-info">
             املأ الجدول أدناه كما لو كنت تستخدم Excel. كل صف سيصبح بطاقة تعليمية.
-            يمكنك إضافة صفوف جديدة، حذف صفوف، ثم استيراد الكل دفعة واحدة.
         </div>
-
         <div class="bulk-toolbar">
             <button class="btn btn-secondary" id="bulkAddRowBtn">+ إضافة صف</button>
             <button class="btn btn-secondary" id="bulkAdd5RowsBtn">+ إضافة 5 صفوف</button>
             <button class="btn btn-danger" id="bulkClearBtn">مسح الجدول</button>
             <button class="btn btn-secondary" id="bulkSampleBtn">تحميل مثال</button>
         </div>
-
         <div class="bulk-table-wrapper">
             <table class="bulk-table">
                 <thead>
@@ -636,11 +680,9 @@
                         <th>حذف</th>
                     </tr>
                 </thead>
-                <tbody id="bulkTableBody">
-                </tbody>
+                <tbody id="bulkTableBody"></tbody>
             </table>
         </div>
-
         <div class="bulk-actions">
             <div class="bulk-counter">
                 عدد الصفوف: <strong id="bulkRowCount">0</strong> |
@@ -650,7 +692,7 @@
         </div>
     </div>
 
-    <!-- المراجعة -->
+    <!-- المراجعة (محدّث) -->
     <div id="review" class="section">
         <h2>وضع المراجعة</h2>
         <div class="review-filters">
@@ -672,24 +714,55 @@
         </div>
         
         <div id="reviewArea" style="display: none;">
-            <div class="flashcard-container" id="flashcardContainer">
-                <div class="flashcard" id="flashcard">
-                    <div class="card-face card-front">
-                        <span class="card-category" id="cardCat"></span>
-                        <span class="card-difficulty" id="cardDiff"></span>
-                        <h2 id="cardFront"></h2>
-                        <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 10px;">اضغط للقلب</p>
-                    </div>
-                    <div class="card-face card-back">
-                        <h2 id="cardBack"></h2>
-                        <p id="cardExample" style="font-size: 0.9rem; font-style: italic; margin-top: 10px;"></p>
+            <div class="flashcard-wrapper">
+                <div class="flashcard-container" id="flashcardContainer">
+                    <div class="flashcard" id="flashcard">
+                        <!-- الوجه الأمامي: مع حقل إدخال -->
+                        <div class="card-face card-front">
+                            <span class="card-category" id="cardCat"></span>
+                            <span class="card-difficulty" id="cardDiff"></span>
+                            <h2 id="cardFront"></h2>
+                            
+                            <div class="self-test-box">
+                                <input 
+                                    type="text" 
+                                    id="selfTestInput" 
+                                    class="self-test-input" 
+                                    placeholder="اكتب ما تتذكره هنا..."
+                                    autocomplete="off"
+                                >
+                                <div class="self-test-actions">
+                                    <button type="button" class="self-test-btn" id="checkAnswerBtn">تحقق من إجابتي</button>
+                                    <button type="button" class="self-test-btn" id="skipBtn">تخطي</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- الوجه الخلفي: مع مقارنة الإجابات -->
+                        <div class="card-face card-back">
+                            <h2 id="cardBack"></h2>
+                            
+                            <div class="answer-comparison" id="answerComparison">
+                                <div class="answer-box" id="userAnswerBox">
+                                    <div class="answer-box-label">إجابتك</div>
+                                    <div class="answer-box-text" id="userAnswerText">-</div>
+                                </div>
+                                <div class="answer-box correct" id="correctAnswerBox">
+                                    <div class="answer-box-label">الإجابة الصحيحة</div>
+                                    <div class="answer-box-text" id="correctAnswerText">-</div>
+                                </div>
+                            </div>
+                            
+                            <p id="cardExample" class="card-example"></p>
+                        </div>
                     </div>
                 </div>
             </div>
+            
             <div class="review-controls">
-                <button class="btn btn-danger" data-diff="hard">صعب</button>
-                <button class="btn btn-warning" data-diff="medium">متوسط</button>
-                <button class="btn btn-success" data-diff="easy">سهل</button>
+                <button class="btn btn-danger" data-diff="hard">❌ صعب</button>
+                <button class="btn btn-warning" data-diff="medium">🤔 متوسط</button>
+                <button class="btn btn-success" data-diff="easy">✅ سهل</button>
             </div>
             <p class="review-progress" id="reviewProgress"></p>
         </div>
@@ -812,17 +885,48 @@ function bindEvents() {
     document.getElementById('searchInput').addEventListener('input', renderList);
     document.getElementById('reviewFilter').addEventListener('change', startReview);
     document.getElementById('difficultyFilter').addEventListener('change', startReview);
-    document.getElementById('flashcardContainer').addEventListener('click', flipCard);
     
+    // أزرار المراجعة
     document.querySelectorAll('.review-controls .btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
             markDifficulty(this.getAttribute('data-diff'));
         });
     });
     
+    // ====== أحداث الاختبار الذاتي الجديد ======
+    document.getElementById('checkAnswerBtn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        flipCard();
+    });
+    
+    document.getElementById('skipBtn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        skipCard();
+    });
+    
+    // Enter في حقل الإدخال = تحقق
+    document.getElementById('selfTestInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            e.stopPropagation();
+            flipCard();
+        }
+    });
+    
+    // منع قلب البطاقة عند الضغط على حقل الإدخال
+    document.getElementById('selfTestInput').addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+    
+    document.querySelector('.self-test-box').addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+    
+    // الاختبار
     document.getElementById('startQuizBtn').addEventListener('click', startQuiz);
     document.getElementById('resetQuizBtn').addEventListener('click', resetQuiz);
     
+    // النسخ الاحتياطي
     document.getElementById('exportBtn').addEventListener('click', exportData);
     document.getElementById('importBtn').addEventListener('click', function() {
         document.getElementById('importFile').click();
@@ -830,10 +934,8 @@ function bindEvents() {
     document.getElementById('importFile').addEventListener('change', importData);
     document.getElementById('clearBtn').addEventListener('click', clearAllData);
     
-    // أحداث الاستيراد الجماعي
-    document.getElementById('bulkAddRowBtn').addEventListener('click', function() {
-        addBulkRow();
-    });
+    // الاستيراد الجماعي
+    document.getElementById('bulkAddRowBtn').addEventListener('click', function() { addBulkRow(); });
     document.getElementById('bulkAdd5RowsBtn').addEventListener('click', function() {
         for (let i = 0; i < 5; i++) addBulkRow();
     });
@@ -843,7 +945,7 @@ function bindEvents() {
 }
 
 // ============================================
-// رسائل التنبيه (Toast)
+// Toast
 // ============================================
 function showToast(message, isError) {
     const toast = document.getElementById('toast');
@@ -851,21 +953,15 @@ function showToast(message, isError) {
     toast.classList.remove('error');
     if (isError) toast.classList.add('error');
     toast.classList.add('show');
-    setTimeout(function() {
-        toast.classList.remove('show');
-    }, 2500);
+    setTimeout(function() { toast.classList.remove('show'); }, 2500);
 }
 
 // ============================================
 // التبديل بين الأقسام
 // ============================================
 function switchTab(tabId, btn) {
-    document.querySelectorAll('.section').forEach(function(s) {
-        s.classList.remove('active');
-    });
-    document.querySelectorAll('.tab-btn').forEach(function(b) {
-        b.classList.remove('active');
-    });
+    document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
     document.getElementById(tabId).classList.add('active');
     btn.classList.add('active');
     
@@ -876,7 +972,7 @@ function switchTab(tabId, btn) {
 }
 
 // ============================================
-// إضافة بطاقة واحدة
+// إضافة بطاقة
 // ============================================
 function addCard() {
     const en = document.getElementById('enWord').value.trim();
@@ -915,340 +1011,7 @@ function addCard() {
 }
 
 // ============================================
-// الاستيراد الجماعي (جدول Excel)
-// ============================================
-function initBulkTable() {
-    // ابدأ بـ 5 صفوف فارغة
-    for (let i = 0; i < 5; i++) {
-        addBulkRow();
-    }
-}
-
-function addBulkRow(data) {
-    const tbody = document.getElementById('bulkTableBody');
-    const rowIndex = tbody.children.length + 1;
-    
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-        <td class="row-number">${rowIndex}</td>
-        <td><input type="text" class="bulk-en" placeholder="Word" value="${data ? escapeHtml(data.en || '') : ''}"></td>
-        <td><input type="text" class="bulk-ar" placeholder="Meaning" value="${data ? escapeHtml(data.ar || '') : ''}"></td>
-        <td><input type="text" class="bulk-example" placeholder="Example (optional)" value="${data ? escapeHtml(data.example || '') : ''}"></td>
-        <td><input type="text" class="bulk-category" placeholder="Category" list="categoriesList" value="${data ? escapeHtml(data.category || '') : ''}"></td>
-        <td>
-            <select class="bulk-difficulty">
-                <option value="easy" ${data && data.difficulty === 'easy' ? 'selected' : ''}>سهل</option>
-                <option value="medium" ${(!data || data.difficulty === 'medium') ? 'selected' : ''}>متوسط</option>
-                <option value="hard" ${data && data.difficulty === 'hard' ? 'selected' : ''}>صعب</option>
-            </select>
-        </td>
-        <td><button class="row-delete" title="حذف الصف">✕</button></td>
-    `;
-    
-    tbody.appendChild(tr);
-    
-    // ربط زر الحذف
-    tr.querySelector('.row-delete').addEventListener('click', function() {
-        tr.remove();
-        renumberBulkRows();
-        updateBulkCounter();
-    });
-    
-    // تحديث العداد عند أي تعديل
-    tr.querySelectorAll('input, select').forEach(function(el) {
-        el.addEventListener('input', updateBulkCounter);
-        el.addEventListener('change', updateBulkCounter);
-    });
-    
-    updateBulkCounter();
-}
-
-function renumberBulkRows() {
-    const rows = document.querySelectorAll('#bulkTableBody tr');
-    rows.forEach(function(row, index) {
-        row.querySelector('.row-number').textContent = index + 1;
-    });
-}
-
-function updateBulkCounter() {
-    const rows = document.querySelectorAll('#bulkTableBody tr');
-    let validCount = 0;
-    rows.forEach(function(row) {
-        const en = row.querySelector('.bulk-en').value.trim();
-        const ar = row.querySelector('.bulk-ar').value.trim();
-        if (en && ar) validCount++;
-    });
-    document.getElementById('bulkRowCount').textContent = rows.length;
-    document.getElementById('bulkValidCount').textContent = validCount;
-}
-
-function clearBulkTable() {
-    if (!confirm('هل تريد مسح جميع صفوف الجدول؟')) return;
-    document.getElementById('bulkTableBody').innerHTML = '';
-    initBulkTable();
-    showToast('تم مسح الجدول');
-}
-
-function loadSampleData() {
-    if (document.querySelectorAll('#bulkTableBody tr').length > 0) {
-        if (!confirm('سيتم إضافة بيانات المثال إلى الجدول الحالي. متابعة؟')) return;
-    }
-    
-    const samples = [
-        { en: 'Marketing', ar: 'تسويق', example: 'Digital marketing is growing fast.', category: 'Business', difficulty: 'easy' },
-        { en: 'E-commerce', ar: 'التجارة الإلكترونية', example: 'I run an e-commerce store.', category: 'Business', difficulty: 'medium' },
-        { en: 'Revenue', ar: 'الإيرادات', example: 'Our revenue increased this quarter.', category: 'Business', difficulty: 'medium' },
-        { en: 'Strategy', ar: 'استراتيجية', example: 'We need a new marketing strategy.', category: 'Marketing', difficulty: 'hard' },
-        { en: 'Customer', ar: 'عميل', example: 'The customer is always right.', category: 'Business', difficulty: 'easy' }
-    ];
-    
-    samples.forEach(function(s) {
-        addBulkRow(s);
-    });
-    
-    showToast('تم تحميل بيانات المثال');
-}
-
-function importBulkData() {
-    const rows = document.querySelectorAll('#bulkTableBody tr');
-    let addedCount = 0;
-    let skippedCount = 0;
-    const timestamp = Date.now();
-    
-    rows.forEach(function(row, index) {
-        const en = row.querySelector('.bulk-en').value.trim();
-        const ar = row.querySelector('.bulk-ar').value.trim();
-        const example = row.querySelector('.bulk-example').value.trim();
-        const category = row.querySelector('.bulk-category').value.trim() || 'عام';
-        const difficulty = row.querySelector('.bulk-difficulty').value;
-        
-        if (!en || !ar) {
-            skippedCount++;
-            return;
-        }
-        
-        cards.push({
-            id: timestamp + index,
-            en: en,
-            ar: ar,
-            example: example,
-            category: category,
-            difficulty: difficulty,
-            status: 'learning',
-            reviews: 0,
-            correctAnswers: 0,
-            dateAdded: new Date().toLocaleDateString('ar-EG')
-        });
-        addedCount++;
-    });
-    
-    if (addedCount === 0) {
-        showToast('لا توجد بيانات صالحة للاستيراد', true);
-        return;
-    }
-    
-    saveData();
-    
-    // مسح الصفوف المستوردة فقط
-    const tbody = document.getElementById('bulkTableBody');
-    const rowsArray = Array.from(tbody.children);
-    rowsArray.forEach(function(row) {
-        const en = row.querySelector('.bulk-en').value.trim();
-        const ar = row.querySelector('.bulk-ar').value.trim();
-        if (en && ar) {
-            row.remove();
-        }
-    });
-    renumberBulkRows();
-    updateBulkCounter();
-    
-    let message = 'تم استيراد ' + addedCount + ' بطاقة';
-    if (skippedCount > 0) {
-        message += ' (تم تخطي ' + skippedCount + ' صف فارغ)';
-    }
-    showToast(message);
-}
-
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-// ============================================
-// حفظ البيانات
-// ============================================
-function initApp() {
-    updateCategories();
-    renderList();
-    updateStats();
-}
-
-function saveData() {
-    localStorage.setItem('flashcards', JSON.stringify(cards));
-    updateCategories();
-    updateStats();
-}
-
-// ============================================
-// تحديث القوائم والإحصائيات
-// ============================================
-function updateCategories() {
-    const categories = [...new Set(cards.map(function(c) { return c.category; }))];
-    const datalist = document.getElementById('categoriesList');
-    const reviewFilter = document.getElementById('reviewFilter');
-    
-    datalist.innerHTML = categories.map(function(c) {
-        return '<option value="' + c + '">';
-    }).join('');
-    
-    reviewFilter.innerHTML = '<option value="all">الكل</option>' + 
-                             categories.map(function(c) {
-                                 return '<option value="' + c + '">' + c + '</option>';
-                             }).join('');
-}
-
-function updateStats() {
-    const total = cards.length;
-    const mastered = cards.filter(function(c) { return c.status === 'mastered'; }).length;
-    const learning = total - mastered;
-    const accuracy = total > 0 ? Math.round((mastered / total) * 100) : 0;
-    
-    document.getElementById('totalCount').innerText = total;
-    document.getElementById('learningCount').innerText = learning;
-    document.getElementById('masteredCount').innerText = mastered;
-    document.getElementById('accuracyRate').innerText = accuracy + '%';
-    
-    const categoryStats = {};
-    cards.forEach(function(c) {
-        if (!categoryStats[c.category]) categoryStats[c.category] = 0;
-        categoryStats[c.category]++;
-    });
-    
-    const categoryStatsDiv = document.getElementById('categoryStats');
-    if (total === 0) {
-        categoryStatsDiv.innerHTML = '<p style="color: var(--text-light);">لا توجد بيانات</p>';
-    } else {
-        categoryStatsDiv.innerHTML = Object.entries(categoryStats).map(function(entry) {
-            const cat = entry[0];
-            const count = entry[1];
-            const percentage = (count / total) * 100;
-            return '<div class="stat-bar">' +
-                   '<div class="stat-bar-label"><span>' + cat + '</span><span>' + count + ' (' + Math.round(percentage) + '%)</span></div>' +
-                   '<div class="stat-bar-fill"><div class="stat-bar-progress" style="width: ' + percentage + '%"></div></div>' +
-                   '</div>';
-        }).join('');
-    }
-    
-    const difficultyStats = { easy: 0, medium: 0, hard: 0 };
-    cards.forEach(function(c) { difficultyStats[c.difficulty]++; });
-    
-    const difficultyStatsDiv = document.getElementById('difficultyStats');
-    if (total === 0) {
-        difficultyStatsDiv.innerHTML = '<p style="color: var(--text-light);">لا توجد بيانات</p>';
-    } else {
-        const labels = { easy: 'سهل', medium: 'متوسط', hard: 'صعب' };
-        difficultyStatsDiv.innerHTML = Object.entries(difficultyStats).map(function(entry) {
-            const diff = entry[0];
-            const count = entry[1];
-            const percentage = (count / total) * 100;
-            return '<div class="stat-bar">' +
-                   '<div class="stat-bar-label"><span>' + labels[diff] + '</span><span>' + count + ' (' + Math.round(percentage) + '%)</span></div>' +
-                   '<div class="stat-bar-fill"><div class="stat-bar-progress" style="width: ' + percentage + '%"></div></div>' +
-                   '</div>';
-        }).join('');
-    }
-}
-
-// ============================================
-// عرض قائمة البطاقات
-// ============================================
-function renderList() {
-    const search = document.getElementById('searchInput').value.toLowerCase();
-    const list = document.getElementById('cardsList');
-    
-    const filtered = cards.filter(function(c) {
-        return c.en.toLowerCase().includes(search) || 
-               c.ar.toLowerCase().includes(search) ||
-               c.category.toLowerCase().includes(search);
-    });
-
-    if (filtered.length === 0) {
-        list.innerHTML = '<p class="empty-state">لا توجد بطاقات</p>';
-        return;
-    }
-
-    list.innerHTML = filtered.map(function(c) {
-        const diffColor = c.difficulty === 'easy' ? 'var(--success)' : 
-                          c.difficulty === 'medium' ? 'var(--warning)' : 'var(--danger)';
-        const diffLabel = c.difficulty === 'easy' ? 'سهل' : 
-                          c.difficulty === 'medium' ? 'متوسط' : 'صعب';
-        const statusColor = c.status === 'mastered' ? 'var(--success)' : 'var(--primary)';
-        const statusLabel = c.status === 'mastered' ? 'متقنة' : 'قيد التعلم';
-        
-        return '<div class="list-card">' +
-               '<button class="edit-btn" data-id="' + c.id + '">تعديل</button>' +
-               '<button class="delete-btn" data-id="' + c.id + '">حذف</button>' +
-               '<h4>' + c.en + '</h4>' +
-               '<p>' + c.ar + '</p>' +
-               (c.example ? '<p style="font-size: 0.85rem; font-style: italic; margin-top: 5px;">"' + c.example + '"</p>' : '') +
-               '<div>' +
-               '<span class="badge">' + c.category + '</span>' +
-               '<span class="badge" style="background: ' + diffColor + '">' + diffLabel + '</span>' +
-               '<span class="badge" style="background: ' + statusColor + '">' + statusLabel + '</span>' +
-               '</div>' +
-               '</div>';
-    }).join('');
-    
-    list.querySelectorAll('.edit-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            editCard(parseInt(this.getAttribute('data-id')));
-        });
-    });
-    
-    list.querySelectorAll('.delete-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            deleteCard(parseInt(this.getAttribute('data-id')));
-        });
-    });
-}
-
-function deleteCard(id) {
-    if (confirm('هل أنت متأكد من حذف هذه البطاقة؟')) {
-        cards = cards.filter(function(c) { return c.id !== id; });
-        saveData();
-        renderList();
-    }
-}
-
-function editCard(id) {
-    const card = cards.find(function(c) { return c.id === id; });
-    if (!card) return;
-    
-    const newEn = prompt('الكلمة بالإنجليزية:', card.en);
-    if (newEn === null) return;
-    
-    const newAr = prompt('المعنى:', card.ar);
-    if (newAr === null) return;
-    
-    const newExample = prompt('مثال:', card.example || '');
-    if (newExample === null) return;
-    
-    const newCategory = prompt('التصنيف:', card.category);
-    if (newCategory === null) return;
-    
-    card.en = newEn;
-    card.ar = newAr;
-    card.example = newExample;
-    card.category = newCategory;
-    
-    saveData();
-    renderList();
-    showToast('تم تحديث البطاقة');
-}
-
-// ============================================
-// المراجعة
+// المراجعة (محدّث مع الاختبار الذاتي)
 // ============================================
 function startReview() {
     const filter = document.getElementById('reviewFilter').value;
@@ -1289,13 +1052,59 @@ function showCurrentCard() {
     const diffLabels = { easy: 'سهل', medium: 'متوسط', hard: 'صعب' };
     document.getElementById('cardDiff').textContent = diffLabels[card.difficulty];
     
+    // إعادة تعيين البطاقة
     document.getElementById('flashcard').classList.remove('flipped');
+    
+    // مسح حقل الإدخال والتركيز عليه
+    const selfTestInput = document.getElementById('selfTestInput');
+    selfTestInput.value = '';
+    setTimeout(function() { selfTestInput.focus(); }, 100);
+    
+    // إعادة تعيين مقارنة الإجابات
+    document.getElementById('userAnswerText').textContent = '-';
+    document.getElementById('correctAnswerText').textContent = card.ar;
+    document.getElementById('userAnswerBox').className = 'answer-box';
+    document.getElementById('correctAnswerBox').className = 'answer-box correct';
+    
     document.getElementById('reviewProgress').textContent = 
         'البطاقة ' + (currentCardIndex + 1) + ' من ' + currentReviewCards.length;
 }
 
 function flipCard() {
-    document.getElementById('flashcard').classList.toggle('flipped');
+    const flashcard = document.getElementById('flashcard');
+    const userAnswer = document.getElementById('selfTestInput').value.trim();
+    
+    // قلب البطاقة
+    flashcard.classList.add('flipped');
+    
+    // عرض إجابة المستخدم
+    const userAnswerText = document.getElementById('userAnswerText');
+    const userAnswerBox = document.getElementById('userAnswerBox');
+    const correctAnswer = currentReviewCards[currentCardIndex].ar;
+    
+    if (userAnswer === '') {
+        userAnswerText.textContent = '(لم تكتب إجابة)';
+        userAnswerBox.className = 'answer-box empty';
+    } else {
+        userAnswerText.textContent = userAnswer;
+        
+        // مقارنة ذكية (تتجاهل المسافات الزائدة وحالة الأحرف)
+        const normalize = function(str) {
+            return str.trim().toLowerCase().replace(/\s+/g, ' ');
+        };
+        
+        if (normalize(userAnswer) === normalize(correctAnswer)) {
+            userAnswerBox.className = 'answer-box correct';
+        } else {
+            userAnswerBox.className = 'answer-box wrong';
+        }
+    }
+}
+
+function skipCard() {
+    // تخطي البطاقة الحالية والانتقال للتالية
+    currentCardIndex++;
+    showCurrentCard();
 }
 
 function markDifficulty(difficulty) {
@@ -1354,9 +1163,7 @@ function showQuizQuestion() {
     while (options.length < 4 && otherCards.length > 0) {
         const randomIndex = Math.floor(Math.random() * otherCards.length);
         const randomCard = otherCards.splice(randomIndex, 1)[0];
-        if (options.indexOf(randomCard.ar) === -1) {
-            options.push(randomCard.ar);
-        }
+        if (options.indexOf(randomCard.ar) === -1) options.push(randomCard.ar);
     }
     
     options = options.sort(function() { return Math.random() - 0.5; });
@@ -1368,9 +1175,7 @@ function showQuizQuestion() {
         const div = document.createElement('div');
         div.className = 'quiz-option';
         div.textContent = opt;
-        div.addEventListener('click', function() {
-            checkAnswer(opt, currentCard.ar);
-        });
+        div.addEventListener('click', function() { checkAnswer(opt, currentCard.ar); });
         optionsDiv.appendChild(div);
     });
     
@@ -1408,6 +1213,301 @@ function resetQuiz() {
     document.getElementById('quizSetup').style.display = 'block';
     document.getElementById('quizArea').style.display = 'none';
     document.getElementById('quizResult').style.display = 'none';
+}
+
+// ============================================
+// الاستيراد الجماعي
+// ============================================
+function initBulkTable() {
+    for (let i = 0; i < 5; i++) addBulkRow();
+}
+
+function addBulkRow(data) {
+    const tbody = document.getElementById('bulkTableBody');
+    const rowIndex = tbody.children.length + 1;
+    
+    const tr = document.createElement('tr');
+    tr.innerHTML = 
+        '<td class="row-number">' + rowIndex + '</td>' +
+        '<td><input type="text" class="bulk-en" placeholder="Word" value="' + (data ? escapeHtml(data.en || '') : '') + '"></td>' +
+        '<td><input type="text" class="bulk-ar" placeholder="Meaning" value="' + (data ? escapeHtml(data.ar || '') : '') + '"></td>' +
+        '<td><input type="text" class="bulk-example" placeholder="Example (optional)" value="' + (data ? escapeHtml(data.example || '') : '') + '"></td>' +
+        '<td><input type="text" class="bulk-category" placeholder="Category" list="categoriesList" value="' + (data ? escapeHtml(data.category || '') : '') + '"></td>' +
+        '<td><select class="bulk-difficulty">' +
+        '<option value="easy"' + (data && data.difficulty === 'easy' ? ' selected' : '') + '>سهل</option>' +
+        '<option value="medium"' + ((!data || data.difficulty === 'medium') ? ' selected' : '') + '>متوسط</option>' +
+        '<option value="hard"' + (data && data.difficulty === 'hard' ? ' selected' : '') + '>صعب</option>' +
+        '</select></td>' +
+        '<td><button class="row-delete" title="حذف">✕</button></td>';
+    
+    tbody.appendChild(tr);
+    
+    tr.querySelector('.row-delete').addEventListener('click', function() {
+        tr.remove();
+        renumberBulkRows();
+        updateBulkCounter();
+    });
+    
+    tr.querySelectorAll('input, select').forEach(function(el) {
+        el.addEventListener('input', updateBulkCounter);
+        el.addEventListener('change', updateBulkCounter);
+    });
+    
+    updateBulkCounter();
+}
+
+function renumberBulkRows() {
+    const rows = document.querySelectorAll('#bulkTableBody tr');
+    rows.forEach(function(row, index) {
+        row.querySelector('.row-number').textContent = index + 1;
+    });
+}
+
+function updateBulkCounter() {
+    const rows = document.querySelectorAll('#bulkTableBody tr');
+    let validCount = 0;
+    rows.forEach(function(row) {
+        const en = row.querySelector('.bulk-en').value.trim();
+        const ar = row.querySelector('.bulk-ar').value.trim();
+        if (en && ar) validCount++;
+    });
+    document.getElementById('bulkRowCount').textContent = rows.length;
+    document.getElementById('bulkValidCount').textContent = validCount;
+}
+
+function clearBulkTable() {
+    if (!confirm('هل تريد مسح جميع صفوف الجدول؟')) return;
+    document.getElementById('bulkTableBody').innerHTML = '';
+    initBulkTable();
+    showToast('تم مسح الجدول');
+}
+
+function loadSampleData() {
+    if (document.querySelectorAll('#bulkTableBody tr').length > 0) {
+        if (!confirm('سيتم إضافة بيانات المثال إلى الجدول الحالي. متابعة؟')) return;
+    }
+    
+    const samples = [
+        { en: 'Marketing', ar: 'تسويق', example: 'Digital marketing is growing fast.', category: 'Business', difficulty: 'easy' },
+        { en: 'E-commerce', ar: 'التجارة الإلكترونية', example: 'I run an e-commerce store.', category: 'Business', difficulty: 'medium' },
+        { en: 'Revenue', ar: 'الإيرادات', example: 'Our revenue increased this quarter.', category: 'Business', difficulty: 'medium' },
+        { en: 'Strategy', ar: 'استراتيجية', example: 'We need a new marketing strategy.', category: 'Marketing', difficulty: 'hard' },
+        { en: 'Customer', ar: 'عميل', example: 'The customer is always right.', category: 'Business', difficulty: 'easy' }
+    ];
+    
+    samples.forEach(function(s) { addBulkRow(s); });
+    showToast('تم تحميل بيانات المثال');
+}
+
+function importBulkData() {
+    const rows = document.querySelectorAll('#bulkTableBody tr');
+    let addedCount = 0;
+    let skippedCount = 0;
+    const timestamp = Date.now();
+    
+    rows.forEach(function(row, index) {
+        const en = row.querySelector('.bulk-en').value.trim();
+        const ar = row.querySelector('.bulk-ar').value.trim();
+        const example = row.querySelector('.bulk-example').value.trim();
+        const category = row.querySelector('.bulk-category').value.trim() || 'عام';
+        const difficulty = row.querySelector('.bulk-difficulty').value;
+        
+        if (!en || !ar) { skippedCount++; return; }
+        
+        cards.push({
+            id: timestamp + index,
+            en: en,
+            ar: ar,
+            example: example,
+            category: category,
+            difficulty: difficulty,
+            status: 'learning',
+            reviews: 0,
+            correctAnswers: 0,
+            dateAdded: new Date().toLocaleDateString('ar-EG')
+        });
+        addedCount++;
+    });
+    
+    if (addedCount === 0) {
+        showToast('لا توجد بيانات صالحة للاستيراد', true);
+        return;
+    }
+    
+    saveData();
+    
+    const tbody = document.getElementById('bulkTableBody');
+    Array.from(tbody.children).forEach(function(row) {
+        const en = row.querySelector('.bulk-en').value.trim();
+        const ar = row.querySelector('.bulk-ar').value.trim();
+        if (en && ar) row.remove();
+    });
+    renumberBulkRows();
+    updateBulkCounter();
+    
+    let message = 'تم استيراد ' + addedCount + ' بطاقة';
+    if (skippedCount > 0) message += ' (تم تخطي ' + skippedCount + ' صف فارغ)';
+    showToast(message);
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// ============================================
+// حفظ البيانات والإحصائيات
+// ============================================
+function initApp() {
+    updateCategories();
+    renderList();
+    updateStats();
+}
+
+function saveData() {
+    localStorage.setItem('flashcards', JSON.stringify(cards));
+    updateCategories();
+    updateStats();
+}
+
+function updateCategories() {
+    const categories = [...new Set(cards.map(function(c) { return c.category; }))];
+    const datalist = document.getElementById('categoriesList');
+    const reviewFilter = document.getElementById('reviewFilter');
+    
+    datalist.innerHTML = categories.map(function(c) { return '<option value="' + c + '">'; }).join('');
+    reviewFilter.innerHTML = '<option value="all">الكل</option>' + 
+                             categories.map(function(c) { return '<option value="' + c + '">' + c + '</option>'; }).join('');
+}
+
+function updateStats() {
+    const total = cards.length;
+    const mastered = cards.filter(function(c) { return c.status === 'mastered'; }).length;
+    const learning = total - mastered;
+    const accuracy = total > 0 ? Math.round((mastered / total) * 100) : 0;
+    
+    document.getElementById('totalCount').innerText = total;
+    document.getElementById('learningCount').innerText = learning;
+    document.getElementById('masteredCount').innerText = mastered;
+    document.getElementById('accuracyRate').innerText = accuracy + '%';
+    
+    const categoryStats = {};
+    cards.forEach(function(c) {
+        if (!categoryStats[c.category]) categoryStats[c.category] = 0;
+        categoryStats[c.category]++;
+    });
+    
+    const categoryStatsDiv = document.getElementById('categoryStats');
+    if (total === 0) {
+        categoryStatsDiv.innerHTML = '<p style="color: var(--text-light);">لا توجد بيانات</p>';
+    } else {
+        categoryStatsDiv.innerHTML = Object.entries(categoryStats).map(function(entry) {
+            const cat = entry[0];
+            const count = entry[1];
+            const percentage = (count / total) * 100;
+            return '<div class="stat-bar">' +
+                   '<div class="stat-bar-label"><span>' + cat + '</span><span>' + count + ' (' + Math.round(percentage) + '%)</span></div>' +
+                   '<div class="stat-bar-fill"><div class="stat-bar-progress" style="width: ' + percentage + '%"></div></div>' +
+                   '</div>';
+        }).join('');
+    }
+    
+    const difficultyStats = { easy: 0, medium: 0, hard: 0 };
+    cards.forEach(function(c) { difficultyStats[c.difficulty]++; });
+    
+    const difficultyStatsDiv = document.getElementById('difficultyStats');
+    if (total === 0) {
+        difficultyStatsDiv.innerHTML = '<p style="color: var(--text-light);">لا توجد بيانات</p>';
+    } else {
+        const labels = { easy: 'سهل', medium: 'متوسط', hard: 'صعب' };
+        difficultyStatsDiv.innerHTML = Object.entries(difficultyStats).map(function(entry) {
+            const diff = entry[0];
+            const count = entry[1];
+            const percentage = (count / total) * 100;
+            return '<div class="stat-bar">' +
+                   '<div class="stat-bar-label"><span>' + labels[diff] + '</span><span>' + count + ' (' + Math.round(percentage) + '%)</span></div>' +
+                   '<div class="stat-bar-fill"><div class="stat-bar-progress" style="width: ' + percentage + '%"></div></div>' +
+                   '</div>';
+        }).join('');
+    }
+}
+
+function renderList() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const list = document.getElementById('cardsList');
+    
+    const filtered = cards.filter(function(c) {
+        return c.en.toLowerCase().includes(search) || 
+               c.ar.toLowerCase().includes(search) ||
+               c.category.toLowerCase().includes(search);
+    });
+
+    if (filtered.length === 0) {
+        list.innerHTML = '<p class="empty-state">لا توجد بطاقات</p>';
+        return;
+    }
+
+    list.innerHTML = filtered.map(function(c) {
+        const diffColor = c.difficulty === 'easy' ? 'var(--success)' : 
+                          c.difficulty === 'medium' ? 'var(--warning)' : 'var(--danger)';
+        const diffLabel = c.difficulty === 'easy' ? 'سهل' : 
+                          c.difficulty === 'medium' ? 'متوسط' : 'صعب';
+        const statusColor = c.status === 'mastered' ? 'var(--success)' : 'var(--primary)';
+        const statusLabel = c.status === 'mastered' ? 'متقنة' : 'قيد التعلم';
+        
+        return '<div class="list-card">' +
+               '<button class="edit-btn" data-id="' + c.id + '">تعديل</button>' +
+               '<button class="delete-btn" data-id="' + c.id + '">حذف</button>' +
+               '<h4>' + c.en + '</h4>' +
+               '<p>' + c.ar + '</p>' +
+               (c.example ? '<p style="font-size: 0.85rem; font-style: italic; margin-top: 5px;">"' + c.example + '"</p>' : '') +
+               '<div>' +
+               '<span class="badge">' + c.category + '</span>' +
+               '<span class="badge" style="background: ' + diffColor + '">' + diffLabel + '</span>' +
+               '<span class="badge" style="background: ' + statusColor + '">' + statusLabel + '</span>' +
+               '</div>' +
+               '</div>';
+    }).join('');
+    
+    list.querySelectorAll('.edit-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { editCard(parseInt(this.getAttribute('data-id'))); });
+    });
+    
+    list.querySelectorAll('.delete-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { deleteCard(parseInt(this.getAttribute('data-id'))); });
+    });
+}
+
+function deleteCard(id) {
+    if (confirm('هل أنت متأكد من حذف هذه البطاقة؟')) {
+        cards = cards.filter(function(c) { return c.id !== id; });
+        saveData();
+        renderList();
+    }
+}
+
+function editCard(id) {
+    const card = cards.find(function(c) { return c.id === id; });
+    if (!card) return;
+    
+    const newEn = prompt('الكلمة بالإنجليزية:', card.en);
+    if (newEn === null) return;
+    const newAr = prompt('المعنى:', card.ar);
+    if (newAr === null) return;
+    const newExample = prompt('مثال:', card.example || '');
+    if (newExample === null) return;
+    const newCategory = prompt('التصنيف:', card.category);
+    if (newCategory === null) return;
+    
+    card.en = newEn;
+    card.ar = newAr;
+    card.example = newExample;
+    card.category = newCategory;
+    
+    saveData();
+    renderList();
+    showToast('تم تحديث البطاقة');
 }
 
 // ============================================
@@ -1463,9 +1563,6 @@ function clearAllData() {
     }
 }
 
-// ============================================
-// الوضع الليلي/النهاري
-// ============================================
 function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
